@@ -17,13 +17,11 @@
 
     <h1>TempZen Santé</h1>
 
-    <!-- 1. Urgence -->
     <div class="card">
         <h3>🚨 Urgence</h3>
         <a href="tel:15"><button style="background:red; color:white; font-weight:bold; width: 90%;">APPELER LE 15</button></a>
     </div>
 
-    <!-- 2. Contacts Médicaux -->
     <div class="card">
         <h3>📞 Contacts Médicaux</h3>
         <select id="speContact">
@@ -40,7 +38,6 @@
         <button class="btn-sup" onclick="supprimer('contact')">Supprimer</button>
     </div>
 
-    <!-- 3. Médicaments -->
     <div class="card">
         <h3>💊 Médicaments</h3>
         <input type="text" id="nomMedoc" placeholder="Nom du médicament">
@@ -48,7 +45,6 @@
         <button class="btn-sup" onclick="supprimer('medoc')">Supprimer</button>
     </div>
 
-    <!-- 4. Notes -->
     <div class="card">
         <h3>📝 Notes</h3>
         <textarea id="noteText" placeholder="Votre note..."></textarea>
@@ -56,23 +52,23 @@
         <button class="btn-sup" onclick="supprimer('note')">Supprimer</button>
     </div>
 
-    <!-- 5. RDV -->
     <div class="card">
         <h3>📅 Rendez-vous</h3>
+        <input type="date" id="rdvDate">
+        <input type="time" id="rdvHeure">
         <input type="text" id="rdvDesc" placeholder="Description du RDV">
         <button class="btn-action" onclick="ajouter('rdv')">Ajouter</button>
         <button class="btn-sup" onclick="supprimer('rdv')">Supprimer</button>
     </div>
 
-    <!-- 6. Suivi de santé -->
     <div class="card">
         <h3>📊 Suivi de santé</h3>
-        <input type="text" id="typeMesure" placeholder="Type (ex: Tension)">
+        <input type="text" id="typeMesure" placeholder="Type (ex: Tension ou Glycémie)">
+        <input type="text" id="valeurMesure" placeholder="Valeur (ex: 12/8 ou 1.10)">
         <button class="btn-action" onclick="ajouter('suivi')">Ajouter</button>
         <button class="btn-sup" onclick="supprimer('suivi')">Supprimer</button>
     </div>
 
-    <!-- 7. Sauvegarde PDF -->
     <div class="card">
         <button onclick="genererPDF()" style="background:gold; font-weight:bold; width: 90%;">💾 Sauvegarder mon carnet (PDF)</button>
     </div>
