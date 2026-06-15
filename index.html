@@ -5,27 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f5f7fa; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
-        button { background: #004080; color: white; border: none; padding: 15px 20px; border-radius: 10px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        :root { --marine-blue: #004080; --bg: #f5f7fa; }
+        body { font-family: sans-serif; background: var(--bg); text-align: center; }
+        
+        /* 2. Affichage propre de l'icône 512 */
+        .icon-512 { width: 150px; height: 150px; margin: 20px auto; display: block; }
+        
+        header { background: var(--marine-blue); color: white; padding: 20px; font-size: 24px; }
+        button { padding: 15px 30px; font-size: 18px; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>TempZen Santé</h1>
-        <p>Bienvenue dans votre carnet de suivi personnel.</p>
-        <button onclick="telechargerPDF()">Télécharger mon carnet PDF</button>
-    </div>
+    <header>TempZen Santé</header>
+    
+    <img src="data:image/png;base64,VOTRE_BASE64_512" class="icon-512" alt="Logo TempZen">
+
+    <button onclick="genererVraiPDF()">Télécharger mon carnet (PDF)</button>
 
     <script>
-        function telechargerPDF() {
+        async function genererVraiPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text("Carnet de Santé TempZen", 20, 20);
-            doc.text("Vos données sont ici.", 20, 30);
-            doc.save("mon-carnet-sante.pdf");
+
+            // Titre
+            doc.setFontSize(20);
+            doc.text("Carnet de Santé - TempZen", 20, 20);
+            
+            // Exemple d'ajout de contenu récupéré de votre base IndexedDB
+            doc.setFontSize(12);
+            doc.text("Historique de mes données de santé :", 20, 40);
+            
+            // Ici, vous ajouteriez vos boucles pour lire IndexedDB et faire doc.text()
+            doc.text("Donnée exemple 1 : 12/06/2026 - Tension OK", 20, 50);
+
+            // Génération du fichier binaire
+            doc.save("Carnet_Sante_TempZen.pdf");
         }
     </script>
 </body>

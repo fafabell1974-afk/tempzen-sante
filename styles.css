@@ -1,0 +1,8 @@
+:root { --bleu: #87CEEB; --vert: #98FB98; --rouge: #FF6B6B; --gris: #E0E0E0; }
+body { font-family: Arial, sans-serif; font-size: 18px; padding: 20px; margin: 0; background-color: #f9f9f9; }
+header { background: var(--bleu); padding: 15px; display: flex; align-items: center; justify-content: space-between; border-radius: 10px; color: white; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+button { min-height: 60px; padding: 10px; border: 2px solid var(--bleu); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 18px; background: white; }
+.btn-danger { background-color: var(--rouge); color: white; border: none; }
+.btn-vert { background-color: var(--vert); width: 100%; margin-top: 10px; }
+.card { background: white; padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid var(--gris); }
