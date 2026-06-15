@@ -1,61 +1,31 @@
-let deferredPrompt;
+window.onload = async () => { await initDB(); chargerMedocs(); chargerSuivi(); };
 
-window.onload = async () => {
-    await initDB();
-    console.log("Base de données prête.");
-};
-
-// --- GESTION MÉDICAMENTS ---
 async function ajouterMedoc() {
     const nom = document.getElementById('nomMedoc').value;
     const dose = document.getElementById('doseMedoc').value;
-    if(nom && dose) {
-        addData('medicaments', { nom, dose });
-        document.getElementById('nomMedoc').value = '';
-        document.getElementById('doseMedoc').value = '';
-        chargerMedocs();
-    }
+    if(nom && dose) { await addData('medicaments', { nom, dose }); chargerMedocs(); }
 }
 async function chargerMedocs() {
     const data = await getAll('medicaments');
-    const container = document.getElementById('listeMedocs');
-    container.innerHTML = data.map(m => `<p>💊 ${m.nom} (${m.dose})</p>`).join('');
+    document.getElementById('listeMedocs').innerHTML = data.map(m => `<p>💊 ${m.nom} (${m.dose})</p>`).join('');
 }
 
-// --- GESTION SUIVI SANTÉ ---
 async function ajouterSuivi() {
     const type = document.getElementById('typeMesure').value;
     const valeur = document.getElementById('valeurMesure').value;
-    if(type && valeur) {
-        addData('suivi', { type, valeur, date: new Date().toLocaleDateString() });
-        document.getElementById('typeMesure').value = '';
-        document.getElementById('valeurMesure').value = '';
-        chargerSuivi();
-    }
+    if(type && valeur) { await addData('suivi', { type, valeur, date: new Date().toLocaleDateString() }); chargerSuivi(); }
 }
 async function chargerSuivi() {
     const data = await getAll('suivi');
-    const container = document.getElementById('listeSuivi');
-    container.innerHTML = data.map(s => `<p>📊 ${s.date} : ${s.type} = ${s.valeur}</p>`).join('');
+    document.getElementById('listeSuivi').innerHTML = data.map(s => `<p>📊 ${s.date} : ${s.type} = ${s.valeur}</p>`).join('');
 }
 
-// --- GESTION RENDEZ-VOUS ---
-async function ajouterRdv() {
-    const motif = document.getElementById('motifRdv').value;
-    const date = document.getElementById('dateRdv').value;
-    if(motif && date) {
-        addData('rdv', { motif, date });
-        document.getElementById('motifRdv').value = '';
-        document.getElementById('dateRdv').value = '';
-        chargerRdv();
-    }
-}
-async function chargerRdv() {
-    const data = await getAll('rdv');
-    const container = document.getElementById('listeRdv');
-    container.innerHTML = data.map(r => {
-        const dateObj = new Date(r.date);
-        const dateLocale = dateObj.toLocaleDateString() + ' à ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        return `<p>📅 ${dateLocale} : ${r.motif}</p>`;
-    }).join('');
+async function genererVraiPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text("Carnet de Santé - TempZen", 20, 20);
+    const medocs = await getAll('medicaments');
+    let y = 40;
+    medocs.forEach(m => { doc.text(`- ${m.nom} (${m.dose})`, 20, y); y += 10; });
+    doc.save("Carnet_Sante_TempZen.pdf");
 }
