@@ -4,32 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; }
+        .card { background: white; padding: 15px; margin: 10px auto; border-radius: 10px; border: 1px solid #ddd; max-width: 400px; }
+        input, textarea { width: 90%; margin: 5px; padding: 10px; box-sizing: border-box; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+        .btn-sup { background-color: #ffcccc; border: 1px solid red; }
+    </style>
 </head>
 <body>
-    <header>TempZen Santé</header>
-    <img src="icon-512.png" class="icon-512" style="width:150px; display:block; margin: 20px auto;">
 
+    <h1>TempZen Santé</h1>
+
+    <!-- 1. Urgence -->
     <div class="card">
-        <h3>Médicaments</h3>
+        <h3>🚨 Urgence</h3>
+        <a href="tel:15"><button style="background:red; color:white; font-weight:bold;">APPELER LE 15</button></a>
+    </div>
+
+    <!-- 2. Médicaments -->
+    <div class="card">
+        <h3>💊 Médicaments</h3>
         <input type="text" id="nomMedoc" placeholder="Nom du médicament">
-        <input type="text" id="doseMedoc" placeholder="Dose">
-        <button onclick="ajouterMedoc()" class="btn-vert">Ajouter</button>
-        <div id="listeMedocs"></div>
+        <button onclick="ajouter('medoc')">Ajouter</button>
+        <button class="btn-sup" onclick="supprimer('medoc')">Supprimer</button>
     </div>
 
+    <!-- 3. Notes -->
     <div class="card">
-        <h3>Suivi de santé</h3>
-        <input type="text" id="typeMesure" placeholder="Type (ex: Tension)">
-        <input type="text" id="valeurMesure" placeholder="Valeur">
-        <button onclick="ajouterSuivi()" class="btn-vert">Ajouter</button>
-        <div id="listeSuivi"></div>
+        <h3>📝 Notes</h3>
+        <textarea id="noteText" placeholder="Votre note..."></textarea>
+        <button onclick="ajouter('note')">Ajouter</button>
+        <button class="btn-sup" onclick="supprimer('note')">Supprimer</button>
     </div>
 
-    <button onclick="genererVraiPDF()" style="width:90%; margin:20px 5%; padding:15px;">Télécharger mon carnet (PDF)</button>
+    <!-- 4. RDV -->
+    <div class="card">
+        <h3>📅 Rendez-vous</h3>
+        <input type="text" id="rdvDesc" placeholder="Description du RDV">
+        <button onclick="ajouter('rdv')">Ajouter</button>
+        <button class="btn-sup" onclick="supprimer('rdv')">Supprimer</button>
+    </div>
 
-    <script src="db.js"></script>
-    <script src="app.js"></script>
+    <!-- Sauvegarde PDF -->
+    <div class="card">
+        <button onclick="genererPDF()" style="background:gold;">💾 Sauvegarder mon carnet (PDF)</button>
+    </div>
+
+    <script>
+        function ajouter(cat) { alert("Action ajouter pour : " + cat); }
+        function supprimer(cat) { 
+            if(confirm("Voulez-vous supprimer les données de " + cat + " ?")) { 
+                alert("Données de " + cat + " supprimées."); 
+            } 
+        }
+        function genererPDF() { alert("Génération du PDF en cours..."); }
+    </script>
 </body>
 </html>
