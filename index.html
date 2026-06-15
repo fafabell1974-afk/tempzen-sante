@@ -2,99 +2,66 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
-    <!-- Lien vers l'icône 192 pour le manifest -->
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" href="icon-192.png">
-    
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; margin: 0; }
-        .logo { width: 150px; margin-bottom: 10px; }
-        .card { background: white; padding: 15px; margin: 10px auto; border-radius: 10px; border: 1px solid #ddd; max-width: 400px; }
-        input, textarea, select { width: 90%; margin: 5px; padding: 10px; box-sizing: border-box; }
-        button { margin: 5px; padding: 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; }
-        .btn-sup { background-color: #ffcccc; border: 1px solid red; }
-        .btn-action { background-color: #e0f7fa; }
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; }
+        .logo-main { width: 150px; margin: 20px auto; }
+        .page { display: none; } /* Cache toutes les pages par défaut */
+        .active { display: block; } /* Affiche seulement la page active */
+        .card { background: white; padding: 20px; margin: 10px auto; border-radius: 15px; border: 1px solid #ddd; max-width: 400px; }
+        input, select, textarea { width: 90%; margin: 5px; padding: 10px; }
+        button { margin: 10px; padding: 12px; cursor: pointer; border-radius: 5px; }
+        .btn-nav { background: #333; color: white; }
     </style>
 </head>
 <body>
 
-    <!-- Logo -->
-    <img src="icon-512.png" alt="Logo TempZen" class="logo">
-    <h1>TempZen Santé</h1>
+    <img src="icon-512.png" alt="Logo" class="logo-main">
 
-    <!-- 1. Urgence -->
-    <div class="card">
+    <div id="menu">
+        <button onclick="showPage('home')">🏠 Accueil</button>
+        <button onclick="showPage('urgence')">🚨</button>
+        <button onclick="showPage('medoc')">💊</button>
+        <button onclick="showPage('rdv')">📅</button>
+        <button onclick="showPage('suivi')">📊</button>
+    </div>
+
+    <div id="home" class="page active card">
+        <h1>TempZen Santé</h1>
+        <p>Bienvenue dans votre espace de suivi.</p>
+    </div>
+
+    <div id="urgence" class="page card">
         <h3>🚨 Urgence</h3>
-        <a href="tel:15"><button style="background:red; color:white; font-weight:bold; width: 90%;">APPELER LE 15</button></a>
+        <a href="tel:15"><button style="background:red; color:white;">APPELER LE 15</button></a>
     </div>
 
-    <!-- 2. Contacts Médicaux -->
-    <div class="card">
-        <h3>📞 Contacts Médicaux</h3>
-        <select id="speContact">
-            <option value="Docteur">Docteur</option>
-            <option value="Infirmier">Infirmier</option>
-            <option value="Sage-femme">Sage-femme</option>
-            <option value="Dentiste">Dentiste</option>
-            <option value="Kinésithérapeute">Kinésithérapeute</option>
-            <option value="Autre">Autre</option>
-        </select>
-        <input type="text" id="nomContact" placeholder="Nom du professionnel">
-        <input type="tel" id="telContact" placeholder="Numéro de téléphone">
-        <button class="btn-action" onclick="ajouter('contact')">Ajouter</button>
-        <button class="btn-sup" onclick="supprimer('contact')">Supprimer</button>
-    </div>
-
-    <!-- 3. Médicaments -->
-    <div class="card">
+    <div id="medoc" class="page card">
         <h3>💊 Médicaments</h3>
-        <input type="text" id="nomMedoc" placeholder="Nom du médicament">
-        <button class="btn-action" onclick="ajouter('medoc')">Ajouter</button>
-        <button class="btn-sup" onclick="supprimer('medoc')">Supprimer</button>
+        <input type="text" placeholder="Nom du médicament">
+        <button onclick="alert('Ajouté')">Ajouter</button>
     </div>
 
-    <!-- 4. Notes -->
-    <div class="card">
-        <h3>📝 Notes</h3>
-        <textarea id="noteText" placeholder="Votre note..."></textarea>
-        <button class="btn-action" onclick="ajouter('note')">Ajouter</button>
-        <button class="btn-sup" onclick="supprimer('note')">Supprimer</button>
-    </div>
-
-    <!-- 5. RDV -->
-    <div class="card">
+    <div id="rdv" class="page card">
         <h3>📅 Rendez-vous</h3>
-        <input type="date" id="rdvDate">
-        <input type="time" id="rdvHeure">
-        <input type="text" id="rdvDesc" placeholder="Description du RDV">
-        <button class="btn-action" onclick="ajouter('rdv')">Ajouter</button>
-        <button class="btn-sup" onclick="supprimer('rdv')">Supprimer</button>
+        <input type="date">
+        <input type="time">
+        <button onclick="alert('RDV pris')">Enregistrer</button>
     </div>
 
-    <!-- 6. Suivi de santé -->
-    <div class="card">
-        <h3>📊 Suivi de santé</h3>
-        <input type="text" id="typeMesure" placeholder="Type (ex: Tension ou Glycémie)">
-        <input type="text" id="valeurMesure" placeholder="Valeur (ex: 12/8 ou 1.10)">
-        <button class="btn-action" onclick="ajouter('suivi')">Ajouter</button>
-        <button class="btn-sup" onclick="supprimer('suivi')">Supprimer</button>
-    </div>
-
-    <!-- 7. Sauvegarde PDF -->
-    <div class="card">
-        <button onclick="genererPDF()" style="background:gold; font-weight:bold; width: 90%;">💾 Sauvegarder mon carnet (PDF)</button>
+    <div id="suivi" class="page card">
+        <h3>📊 Suivi Santé</h3>
+        <input type="text" placeholder="Tension / Glycémie">
+        <button onclick="alert('Enregistré')">Ajouter</button>
     </div>
 
     <script>
-        function ajouter(cat) { alert("Ajouté dans : " + cat); }
-        function supprimer(cat) { 
-            if(confirm("Voulez-vous supprimer les données de " + cat + " ?")) { 
-                alert("Données de " + cat + " supprimées."); 
-            } 
+        function showPage(pageId) {
+            // Cache toutes les pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Affiche la page choisie
+            document.getElementById(pageId).classList.add('active');
         }
-        function genererPDF() { alert("Génération du PDF en cours..."); }
     </script>
 </body>
 </html>
