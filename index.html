@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
+    <!-- Lien vers l'icône 192 pour le manifest -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" href="icon-192.png">
+    
     <style>
         body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; margin: 0; }
+        .logo { width: 150px; margin-bottom: 10px; }
         .card { background: white; padding: 15px; margin: 10px auto; border-radius: 10px; border: 1px solid #ddd; max-width: 400px; }
         input, textarea, select { width: 90%; margin: 5px; padding: 10px; box-sizing: border-box; }
         button { margin: 5px; padding: 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; }
@@ -15,13 +20,17 @@
 </head>
 <body>
 
+    <!-- Logo -->
+    <img src="icon-512.png" alt="Logo TempZen" class="logo">
     <h1>TempZen Santé</h1>
 
+    <!-- 1. Urgence -->
     <div class="card">
         <h3>🚨 Urgence</h3>
         <a href="tel:15"><button style="background:red; color:white; font-weight:bold; width: 90%;">APPELER LE 15</button></a>
     </div>
 
+    <!-- 2. Contacts Médicaux -->
     <div class="card">
         <h3>📞 Contacts Médicaux</h3>
         <select id="speContact">
@@ -38,6 +47,7 @@
         <button class="btn-sup" onclick="supprimer('contact')">Supprimer</button>
     </div>
 
+    <!-- 3. Médicaments -->
     <div class="card">
         <h3>💊 Médicaments</h3>
         <input type="text" id="nomMedoc" placeholder="Nom du médicament">
@@ -45,6 +55,7 @@
         <button class="btn-sup" onclick="supprimer('medoc')">Supprimer</button>
     </div>
 
+    <!-- 4. Notes -->
     <div class="card">
         <h3>📝 Notes</h3>
         <textarea id="noteText" placeholder="Votre note..."></textarea>
@@ -52,6 +63,7 @@
         <button class="btn-sup" onclick="supprimer('note')">Supprimer</button>
     </div>
 
+    <!-- 5. RDV -->
     <div class="card">
         <h3>📅 Rendez-vous</h3>
         <input type="date" id="rdvDate">
@@ -61,6 +73,7 @@
         <button class="btn-sup" onclick="supprimer('rdv')">Supprimer</button>
     </div>
 
+    <!-- 6. Suivi de santé -->
     <div class="card">
         <h3>📊 Suivi de santé</h3>
         <input type="text" id="typeMesure" placeholder="Type (ex: Tension ou Glycémie)">
@@ -69,6 +82,7 @@
         <button class="btn-sup" onclick="supprimer('suivi')">Supprimer</button>
     </div>
 
+    <!-- 7. Sauvegarde PDF -->
     <div class="card">
         <button onclick="genererPDF()" style="background:gold; font-weight:bold; width: 90%;">💾 Sauvegarder mon carnet (PDF)</button>
     </div>
