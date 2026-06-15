@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; }
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; margin: 0; }
         .card { background: white; padding: 15px; margin: 10px auto; border-radius: 10px; border: 1px solid #ddd; max-width: 400px; }
-        input, textarea { width: 90%; margin: 5px; padding: 10px; box-sizing: border-box; }
-        button { margin: 5px; padding: 10px; cursor: pointer; }
+        input, textarea, select { width: 90%; margin: 5px; padding: 10px; box-sizing: border-box; }
+        button { margin: 5px; padding: 10px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; }
         .btn-sup { background-color: #ffcccc; border: 1px solid red; }
+        .btn-action { background-color: #e0f7fa; }
     </style>
 </head>
 <body>
@@ -19,40 +20,65 @@
     <!-- 1. Urgence -->
     <div class="card">
         <h3>🚨 Urgence</h3>
-        <a href="tel:15"><button style="background:red; color:white; font-weight:bold;">APPELER LE 15</button></a>
+        <a href="tel:15"><button style="background:red; color:white; font-weight:bold; width: 90%;">APPELER LE 15</button></a>
     </div>
 
-    <!-- 2. Médicaments -->
+    <!-- 2. Contacts Médicaux -->
+    <div class="card">
+        <h3>📞 Contacts Médicaux</h3>
+        <select id="speContact">
+            <option value="Docteur">Docteur</option>
+            <option value="Infirmier">Infirmier</option>
+            <option value="Sage-femme">Sage-femme</option>
+            <option value="Dentiste">Dentiste</option>
+            <option value="Kinésithérapeute">Kinésithérapeute</option>
+            <option value="Autre">Autre</option>
+        </select>
+        <input type="text" id="nomContact" placeholder="Nom du professionnel">
+        <input type="tel" id="telContact" placeholder="Numéro de téléphone">
+        <button class="btn-action" onclick="ajouter('contact')">Ajouter</button>
+        <button class="btn-sup" onclick="supprimer('contact')">Supprimer</button>
+    </div>
+
+    <!-- 3. Médicaments -->
     <div class="card">
         <h3>💊 Médicaments</h3>
         <input type="text" id="nomMedoc" placeholder="Nom du médicament">
-        <button onclick="ajouter('medoc')">Ajouter</button>
+        <button class="btn-action" onclick="ajouter('medoc')">Ajouter</button>
         <button class="btn-sup" onclick="supprimer('medoc')">Supprimer</button>
     </div>
 
-    <!-- 3. Notes -->
+    <!-- 4. Notes -->
     <div class="card">
         <h3>📝 Notes</h3>
         <textarea id="noteText" placeholder="Votre note..."></textarea>
-        <button onclick="ajouter('note')">Ajouter</button>
+        <button class="btn-action" onclick="ajouter('note')">Ajouter</button>
         <button class="btn-sup" onclick="supprimer('note')">Supprimer</button>
     </div>
 
-    <!-- 4. RDV -->
+    <!-- 5. RDV -->
     <div class="card">
         <h3>📅 Rendez-vous</h3>
         <input type="text" id="rdvDesc" placeholder="Description du RDV">
-        <button onclick="ajouter('rdv')">Ajouter</button>
+        <button class="btn-action" onclick="ajouter('rdv')">Ajouter</button>
         <button class="btn-sup" onclick="supprimer('rdv')">Supprimer</button>
     </div>
 
-    <!-- Sauvegarde PDF -->
+    <!-- 6. Suivi de santé -->
     <div class="card">
-        <button onclick="genererPDF()" style="background:gold;">💾 Sauvegarder mon carnet (PDF)</button>
+        <h3>📊 Suivi de santé</h3>
+        <input type="text" id="typeMesure" placeholder="Type (ex: Tension)">
+        <button class="btn-action" onclick="ajouter('suivi')">Ajouter</button>
+        <button class="btn-sup" onclick="supprimer('suivi')">Supprimer</button>
+    </div>
+
+    <!-- 7. Sauvegarde PDF -->
+    <div class="card">
+        <button onclick="genererPDF()" style="background:gold; font-weight:bold; width: 90%;">💾 Sauvegarder mon carnet (PDF)</button>
     </div>
 
     <script>
-        function ajouter(cat) { alert("Action ajouter pour : " + cat); }
+        function ajouter(cat) { alert("Ajouté dans : " + cat); }
         function supprimer(cat) { 
             if(confirm("Voulez-vous supprimer les données de " + cat + " ?")) { 
                 alert("Données de " + cat + " supprimées."); 
