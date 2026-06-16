@@ -2,35 +2,21 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
     <title>TempZen</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f9; padding-bottom: 50px; }
-        header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
-        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
-        #sideMenu a { padding: 15px 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
-        .container { padding: 20px; }
-        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    </style>
 </head>
 <body>
     <header>
         <div class="menu-btn" onclick="document.getElementById('sideMenu').style.width='250px'">☰</div>
-        <h2 style="margin-left:15px;">TempZen</h2>
+        <h2>TempZen</h2>
     </header>
-
     <div id="sideMenu">
         <a href="#" onclick="showPage('home')">Accueil 🏠</a>
         <a href="#" onclick="showPage('urgence')">Urgence 🚨</a>
         <a href="#" onclick="showPage('medoc')">Médicaments 💊</a>
-        <a href="#" onclick="showPage('rdv')">Rendez-vous 📅</a>
         <a href="#" onclick="showPage('suivi')">Suivi Santé 📊</a>
-        <a href="#" onclick="genererVraiPDF()" style="color:black; background: #ddd;">Sauvegarder PDF 💾</a>
-        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">Fermer ✖</a>
     </div>
-
-    <div id="content" class="container"></div>
+    <div id="content"></div>
 
     <script src="db.js"></script>
     <script src="app.js"></script>
@@ -38,10 +24,15 @@
         function showPage(page) {
             document.getElementById('sideMenu').style.width = '0';
             const div = document.getElementById('content');
-            if(page === 'home') div.innerHTML = `<div class="card"><h1>TempZen</h1><p>Bienvenue sur votre carnet de santé.</p></div>`;
-            else if(page === 'urgence') div.innerHTML = `<div class="card"><h1>Urgence</h1><a href="tel:15"><button>APPELER LE 15</button></a></div>`;
-            else if(page === 'medoc') div.innerHTML = `<div class="card"><h1>Médicaments</h1><input type="text" id="nomMedoc" placeholder="Nom"><input type="text" id="doseMedoc" placeholder="Dose"><button onclick="ajouterMedoc()">Ajouter</button><div id="listeMedocs"></div></div>`;
-            else if(page === 'suivi') div.innerHTML = `<div class="card"><h1>Suivi Santé</h1><input type="text" id="typeMesure" placeholder="Type"><input type="text" id="valeurMesure" placeholder="Valeur"><button onclick="ajouterSuivi()">Ajouter</button><div id="listeSuivi"></div></div>`;
+            if(page === 'home') div.innerHTML = `<div class="card"><h1>Bienvenue</h1><p>Gérez votre santé en toute sérénité.</p></div>`;
+            else if(page === 'urgence') div.innerHTML = `<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>`;
+            else if(page === 'medoc') {
+                div.innerHTML = `<div class="card"><h1>Médicaments</h1><input id="nomMedoc" placeholder="Nom"><input id="doseMedoc" placeholder="Dose"><button onclick="ajouterMedoc()">Ajouter</button><div id="listeMedocs"></div></div>`;
+                chargerMedocs();
+            } else if(page === 'suivi') {
+                div.innerHTML = `<div class="card"><h1>Suivi Santé</h1><input id="typeMesure" placeholder="Type"><input id="valeurMesure" placeholder="Valeur"><button onclick="ajouterSuivi()">Ajouter</button><div id="listeSuivi"></div></div>`;
+                chargerSuivi();
+            }
         }
         showPage('home');
     </script>
