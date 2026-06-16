@@ -10,7 +10,8 @@
         .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
         .logo-small { width: 50px; margin-left: 10px; }
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
-        #sideMenu a { padding: 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
+        #sideMenu a { padding: 15px 20px; display: block; color: white; text-decoration: none; font-size: 20px; display: flex; align-items: center; }
+        #sideMenu a span { margin-right: 15px; font-size: 24px; }
         .container { padding: 20px; }
         .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
         .dashboard-time { font-size: 40px; font-weight: bold; color: #333; }
@@ -33,13 +34,13 @@
     </header>
 
     <div id="sideMenu">
-        <a href="#" onclick="loadPage('home')">Accueil</a>
-        <a href="#" onclick="loadPage('urgence')">Urgence (Appel 15)</a>
-        <a href="#" onclick="loadPage('medoc')">Médicaments</a>
-        <a href="#" onclick="loadPage('rdv')">Rendez-vous</a>
-        <a href="#" onclick="loadPage('suivi')">Suivi Santé</a>
-        <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;">💾 Sauvegarder PDF</a>
-        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">Fermer</a>
+        <a href="#" onclick="loadPage('home')"><span>🏠</span> Accueil</a>
+        <a href="#" onclick="loadPage('urgence')"><span>🚨</span> Urgence (Appel 15)</a>
+        <a href="#" onclick="loadPage('medoc')"><span>💊</span> Médicaments</a>
+        <a href="#" onclick="loadPage('rdv')"><span>📅</span> Rendez-vous</a>
+        <a href="#" onclick="loadPage('suivi')"><span>📊</span> Suivi Santé</a>
+        <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;"><span>💾</span> Sauvegarder PDF</a>
+        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa"><span>✖</span> Fermer</a>
     </div>
 
     <div id="exportContent" class="container"></div>
