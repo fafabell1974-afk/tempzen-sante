@@ -38,7 +38,7 @@
         <a href="#" onclick="loadPage('medoc')">Médicaments</a>
         <a href="#" onclick="loadPage('rdv')">Rendez-vous</a>
         <a href="#" onclick="loadPage('suivi')">Suivi Santé</a>
-        <a href="#" onclick="exporterPDF()" style="color:white; background: #ddd; color: black;">Sauvegarder PDF</a>
+        <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;">💾 Sauvegarder PDF</a>
         <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">Fermer</a>
     </div>
 
@@ -60,7 +60,7 @@
             }
             else if(page === 'urgence') content.innerHTML = '<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>';
             else if(page === 'medoc') content.innerHTML = '<div class="card"><h1>Médicaments</h1><input type="text" id="mN" placeholder="Nom"><input type="text" id="mD" placeholder="Dose"><button class="btn-green" onclick="addItem(\'lMedoc\', \'mN\', \'mD\')">Ajouter</button><ul id="lMedoc"></ul></div>';
-            else if(page === 'rdv') content.innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" id="rN" placeholder="Type"> <input type="date" id="rD"><button class="btn-green" onclick="addItem(\'lRdv\', \'rN\', \'rD\')">Ajouter</button><ul id="lRdv"></ul></div>';
+            else if(page === 'rdv') content.innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" id="rN" placeholder="Type"><input type="date" id="rD"><button class="btn-green" onclick="addItem(\'lRdv\', \'rN\', \'rD\')">Ajouter</button><ul id="lRdv"></ul></div>';
             else if(page === 'suivi') content.innerHTML = '<div class="card"><h1>Suivi Santé</h1><input type="text" id="sN" placeholder="Type"><input type="text" id="sV" placeholder="Valeur"><button class="btn-green" onclick="addItem(\'lSuivi\', \'sN\', \'sV\')">Ajouter</button><ul id="lSuivi"></ul></div>';
         }
 
