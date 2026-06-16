@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>TempZen Santé</title>
+    <title>TempZen</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f4f4f9; padding-bottom: 50px; }
@@ -34,11 +34,11 @@
     </header>
 
     <div id="sideMenu">
-        <a href="#" onclick="loadPage('home')"><span>🏠</span> Accueil</a>
-        <a href="#" onclick="loadPage('urgence')"><span>🚨</span> Urgence (Appel 15)</a>
-        <a href="#" onclick="loadPage('medoc')"><span>💊</span> Médicaments</a>
-        <a href="#" onclick="loadPage('rdv')"><span>📅</span> Rendez-vous</a>
-        <a href="#" onclick="loadPage('suivi')"><span>📊</span> Suivi Santé</a>
+        <a href="#" onclick="showHome()"><span>🏠</span> Accueil</a>
+        <a href="#" onclick="showUrgence()"><span>🚨</span> Urgence</a>
+        <a href="#" onclick="showMedoc()"><span>💊</span> Médicaments</a>
+        <a href="#" onclick="showRdv()"><span>📅</span> Rendez-vous</a>
+        <a href="#" onclick="showSuivi()"><span>📊</span> Suivi Santé</a>
         <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;"><span>💾</span> Sauvegarder PDF</a>
         <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa"><span>✖</span> Fermer</a>
     </div>
@@ -46,29 +46,27 @@
     <div id="exportContent" class="container"></div>
 
     <script>
-        function loadPage(page) {
-            document.getElementById('sideMenu').style.width = '0';
-            let content = document.getElementById('exportContent');
-            
-            if(page === 'home') {
-                content.innerHTML = `
-                    <div class="card">
-                        <div class="dashboard-date" id="date"></div>
-                        <div class="dashboard-time" id="clock"></div>
-                    </div>`;
-                updateClock();
-            }
-            else if(page === 'urgence') content.innerHTML = '<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>';
-            else if(page === 'medoc') content.innerHTML = '<div class="card"><h1>Médicaments</h1><input type="text" id="mN" placeholder="Nom"><input type="text" id="mD" placeholder="Dose"><button class="btn-green" onclick="addItem(\'lMedoc\', \'mN\', \'mD\')">Ajouter</button><ul id="lMedoc"></ul></div>';
-            else if(page === 'rdv') content.innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" id="rN" placeholder="Type"><input type="date" id="rD"><button class="btn-green" onclick="addItem(\'lRdv\', \'rN\', \'rD\')">Ajouter</button><ul id="lRdv"></ul></div>';
-            else if(page === 'suivi') content.innerHTML = '<div class="card"><h1>Suivi Santé</h1><input type="text" id="sN" placeholder="Type"><input type="text" id="sV" placeholder="Valeur"><button class="btn-green" onclick="addItem(\'lSuivi\', \'sN\', \'sV\')">Ajouter</button><ul id="lSuivi"></ul></div>';
-        }
-
-        function updateClock() {
+        function closeMenu() { document.getElementById('sideMenu').style.width = '0'; }
+        
+        function showHome() {
+            closeMenu();
+            document.getElementById('exportContent').innerHTML = `
+                <div class="card">
+                    <div class="dashboard-date" id="date"></div>
+                    <div class="dashboard-time" id="clock"></div>
+                </div>`;
             const now = new Date();
             document.getElementById('date').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
             document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         }
+
+        function showUrgence() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>'; }
+        
+        function showMedoc() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Médicaments</h1><input type="text" id="mN" placeholder="Nom"><input type="text" id="mD" placeholder="Dose"><button class="btn-green" onclick="addItem(\'lMedoc\', \'mN\', \'mD\')">Ajouter</button><ul id="lMedoc"></ul></div>'; }
+        
+        function showRdv() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" id="rN" placeholder="Type"><input type="date" id="rD"><button class="btn-green" onclick="addItem(\'lRdv\', \'rN\', \'rD\')">Ajouter</button><ul id="lRdv"></ul></div>'; }
+        
+        function showSuivi() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Suivi Santé</h1><input type="text" id="sN" placeholder="Type"><input type="text" id="sV" placeholder="Valeur"><button class="btn-green" onclick="addItem(\'lSuivi\', \'sN\', \'sV\')">Ajouter</button><ul id="lSuivi"></ul></div>'; }
 
         function addItem(listId, id1, id2) {
             let val1 = document.getElementById(id1).value;
@@ -82,12 +80,11 @@
         }
 
         function exporterPDF() {
-            document.getElementById('sideMenu').style.width = '0';
-            const element = document.getElementById('exportContent');
-            html2pdf().from(element).save('Mon_Carnet_Sante.pdf');
+            closeMenu();
+            html2pdf().from(document.getElementById('exportContent')).save('Carnet_Sante.pdf');
         }
 
-        loadPage('home');
+        showHome();
     </script>
 </body>
 </html>
