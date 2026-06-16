@@ -2,65 +2,61 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 10px; }
-        .logo-main { width: 150px; margin: 20px auto; }
-        .page { display: none; } /* Cache toutes les pages par défaut */
-        .active { display: block; } /* Affiche seulement la page active */
-        .card { background: white; padding: 20px; margin: 10px auto; border-radius: 15px; border: 1px solid #ddd; max-width: 400px; }
-        input, select, textarea { width: 90%; margin: 5px; padding: 10px; }
-        button { margin: 10px; padding: 12px; cursor: pointer; border-radius: 5px; }
-        .btn-nav { background: #333; color: white; }
+        body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
+        
+        /* En-tête avec Menu */
+        header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .menu-btn { font-size: 24px; cursor: pointer; margin-right: 15px; }
+        .logo-small { width: 40px; }
+        
+        /* Menu latéral (caché par défaut) */
+        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; overflow-x: hidden; transition: 0.3s; padding-top: 60px; z-index: 10; }
+        #sideMenu a { padding: 15px; text-decoration: none; font-size: 20px; color: white; display: block; }
+        
+        /* Page d'accueil */
+        .home-container { text-align: center; padding: 50px 20px; }
+        .logo-large { width: 200px; margin-bottom: 20px; }
+        
+        .card { background: white; padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <img src="icon-512.png" alt="Logo" class="logo-main">
+    <header>
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <img src="icon-512.png" class="logo-small">
+        <h2 style="margin-left:10px;">TempZen</h2>
+    </header>
 
-    <div id="menu">
-        <button onclick="showPage('home')">🏠 Accueil</button>
-        <button onclick="showPage('urgence')">🚨</button>
-        <button onclick="showPage('medoc')">💊</button>
-        <button onclick="showPage('rdv')">📅</button>
-        <button onclick="showPage('suivi')">📊</button>
+    <div id="sideMenu">
+        <a href="javascript:void(0)" onclick="toggleMenu()">✖ Fermer</a>
+        <a href="#" onclick="showSection('home')">🏠 Accueil</a>
+        <a href="#" onclick="showSection('urgence')">🚨 Urgence</a>
+        <a href="#" onclick="showSection('medoc')">💊 Médicaments</a>
+        <a href="#" onclick="showSection('rdv')">📅 RDV</a>
     </div>
 
-    <div id="home" class="page active card">
+    <div id="content" class="home-container">
+        <img src="icon-512.png" class="logo-large">
         <h1>TempZen Santé</h1>
-        <p>Bienvenue dans votre espace de suivi.</p>
-    </div>
-
-    <div id="urgence" class="page card">
-        <h3>🚨 Urgence</h3>
-        <a href="tel:15"><button style="background:red; color:white;">APPELER LE 15</button></a>
-    </div>
-
-    <div id="medoc" class="page card">
-        <h3>💊 Médicaments</h3>
-        <input type="text" placeholder="Nom du médicament">
-        <button onclick="alert('Ajouté')">Ajouter</button>
-    </div>
-
-    <div id="rdv" class="page card">
-        <h3>📅 Rendez-vous</h3>
-        <input type="date">
-        <input type="time">
-        <button onclick="alert('RDV pris')">Enregistrer</button>
-    </div>
-
-    <div id="suivi" class="page card">
-        <h3>📊 Suivi Santé</h3>
-        <input type="text" placeholder="Tension / Glycémie">
-        <button onclick="alert('Enregistré')">Ajouter</button>
+        <p>Votre carnet de santé numérique</p>
     </div>
 
     <script>
-        function showPage(pageId) {
-            // Cache toutes les pages
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Affiche la page choisie
-            document.getElementById(pageId).classList.add('active');
+        function toggleMenu() {
+            const menu = document.getElementById("sideMenu");
+            menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
+        }
+
+        function showSection(id) {
+            const content = document.getElementById("content");
+            if(id === 'home') content.innerHTML = "<h1>TempZen Santé</h1><p>Bienvenue sur votre application.</p>";
+            else if(id === 'urgence') content.innerHTML = "<h1>Urgence</h1><a href='tel:15'><button style='padding:20px; background:red; color:white; font-size:20px;'>APPELER LE 15</button></a>";
+            else content.innerHTML = "<h1>" + id + "</h1><p>Section en construction.</p>";
+            toggleMenu();
         }
     </script>
 </body>
