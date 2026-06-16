@@ -1,7 +1,7 @@
 /* ── TempZen — IndexedDB Layer ── */
 
 const DB_NAME = 'TempZenDB';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 let db;
 
 const initDB = () => new Promise((resolve, reject) => {
@@ -9,12 +9,12 @@ const initDB = () => new Promise((resolve, reject) => {
 
   request.onupgradeneeded = (e) => {
     const database = e.target.result;
-    if (!database.objectStoreNames.contains('medicaments')) {
+    if (!database.objectStoreNames.contains('medicaments'))
       database.createObjectStore('medicaments', { keyPath: 'id', autoIncrement: true });
-    }
-    if (!database.objectStoreNames.contains('suivi')) {
+    if (!database.objectStoreNames.contains('suivi'))
       database.createObjectStore('suivi', { keyPath: 'id', autoIncrement: true });
-    }
+    if (!database.objectStoreNames.contains('rdv'))
+      database.createObjectStore('rdv', { keyPath: 'id', autoIncrement: true });
   };
 
   request.onsuccess = (e) => { db = e.target.result; resolve(); };
