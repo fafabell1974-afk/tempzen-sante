@@ -535,20 +535,20 @@ input::placeholder { color: var(--gray-400); font-size: 14px; }
 .nav-trigger.open .chevron { transform: rotate(180deg); }
 
 .nav-dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 10px);
+  position: fixed;
+  right: 12px;
+  top: 68px;
   background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-md);
-  min-width: 190px;
+  min-width: 200px;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-6px);
+  transform: translateY(-8px);
   transition: opacity var(--transition), transform var(--transition);
-  z-index: 100;
+  z-index: 200;
 }
 .nav-dropdown-menu.open {
   opacity: 1;
