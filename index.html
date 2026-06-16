@@ -6,17 +6,20 @@
     <title>TempZen Santé</title>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
-        header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .menu-btn { font-size: 24px; cursor: pointer; margin-right: 15px; }
+        /* Header et Menu */
+        header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 5; }
+        .menu-btn { font-size: 30px; cursor: pointer; margin-right: 15px; padding: 5px; }
         .logo-small { width: 40px; }
+        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
+        #sideMenu a { padding: 20px; text-decoration: none; font-size: 22px; color: white; display: block; }
         
-        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 60px; }
-        #sideMenu a { padding: 15px; text-decoration: none; font-size: 20px; color: white; display: block; }
-        
-        .dashboard { text-align: center; padding: 20px; }
-        .card { background: white; padding: 20px; margin: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .time-display { font-size: 28px; font-weight: bold; color: #333; margin: 10px 0; }
-        .date-display { font-size: 18px; color: #666; }
+        /* Contenu */
+        .container { padding: 20px; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+        .time-display { font-size: 28px; font-weight: bold; color: #333; }
+        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; box-sizing: border-box; font-size: 16px; border: 1px solid #ddd; border-radius: 8px; }
+        button { width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: none; cursor: pointer; background: #007bff; color: white; margin-top: 10px; }
+        .btn-red { background: #dc3545; }
     </style>
 </head>
 <body>
@@ -28,26 +31,15 @@
     </header>
 
     <div id="sideMenu">
-        <a href="#" onclick="location.reload()">🏠 Accueil</a>
-        <a href="#">🚨 Urgence</a>
-        <a href="#">💊 Médicaments</a>
-        <a href="#">📅 RDV</a>
+        <a href="#" onclick="showSection('dashboard')">🏠 Accueil</a>
+        <a href="#" onclick="showSection('urgence')">🚨 Urgence</a>
+        <a href="#" onclick="showSection('medoc')">💊 Médicaments</a>
+        <a href="#" onclick="showSection('rdv')">📅 RDV</a>
+        <a href="#" onclick="showSection('suivi')">📊 Suivi Santé</a>
     </div>
 
-    <div class="dashboard">
-        <img src="icon-512.png" style="width:120px;">
-        <h1>Bonjour</h1>
-        
-        <div class="card">
-            <div class="date-display" id="date"></div>
-            <div class="time-display" id="clock"></div>
+    <div id="mainContent" class="container">
         </div>
-
-        <div class="card" style="border-left: 5px solid #28a745;">
-            <h3>📅 Prochain RDV</h3>
-            <p id="nextRdv">Aucun RDV prévu pour le moment.</p>
-        </div>
-    </div>
 
     <script>
         function toggleMenu() {
@@ -55,14 +47,33 @@
             menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
         }
 
-        // Mise à jour heure et date
+        function showSection(id) {
+            const content = document.getElementById("mainContent");
+            toggleMenu();
+            
+            if(id === 'dashboard') {
+                content.innerHTML = `<div class="card"><img src="icon-512.png" style="width:100px;"><div class="time-display" id="clock"></div><div id="date"></div></div>
+                                     <div class="card" style="border-left: 5px solid #28a745;"><h3>📅 Prochain RDV</h3><p>Aucun RDV prévu.</p></div>`;
+                updateClock();
+            } else if(id === 'urgence') {
+                content.innerHTML = `<div class="card"><h1>🚨 Urgence</h1><a href='tel:15'><button class='btn-red'>APPELER LE 15</button></a></div>`;
+            } else if(id === 'medoc') {
+                content.innerHTML = `<div class="card"><h1>💊 Médicaments</h1><input type='text' placeholder='Nom du médicament'><button>Ajouter</button></div>`;
+            } else if(id === 'rdv') {
+                content.innerHTML = `<div class="card"><h1>📅 Rendez-vous</h1><input type='date'><input type='time'><button>Enregistrer</button></div>`;
+            } else if(id === 'suivi') {
+                content.innerHTML = `<div class="card"><h1>📊 Suivi Santé</h1><input type='text' placeholder='Type (Tension...)'><input type='text' placeholder='Valeur'><button>Ajouter</button></div>`;
+            }
+        }
+
         function updateClock() {
             const now = new Date();
             document.getElementById('date').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
             document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+
+        // Initialisation au chargement
+        showSection('dashboard');
     </script>
 </body>
 </html>
