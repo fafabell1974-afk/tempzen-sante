@@ -51,12 +51,11 @@
             let content = document.getElementById('exportContent');
             
             if(page === 'home') {
-                // Ici, aucune icône dans le contenu injecté
+                // Dashboard strictement sans icônes ni texte explicatif
                 content.innerHTML = `
                     <div class="card">
                         <div class="dashboard-date" id="date"></div>
                         <div class="dashboard-time" id="clock"></div>
-                        <p>Bienvenue sur votre tableau de bord.</p>
                     </div>`;
                 updateClock();
             }
@@ -89,6 +88,7 @@
             html2pdf().from(element).save('Mon_Carnet_Sante.pdf');
         }
 
+        // Lancement initial
         loadPage('home');
     </script>
 </body>
