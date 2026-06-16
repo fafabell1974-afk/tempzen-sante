@@ -3,26 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>TempZen</title>
-    <script src="db.js"></script>
-    <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
+        body { font-family: sans-serif; margin: 0; background: #f4f4f9; padding-bottom: 50px; }
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
         #sideMenu a { padding: 15px 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
+        .container { padding: 20px; }
     </style>
 </head>
 <body>
+
     <header>
         <div class="menu-btn" onclick="document.getElementById('sideMenu').style.width='250px'">☰</div>
-        <h2>TempZen</h2>
+        <h2 style="margin-left:15px;">TempZen</h2>
     </header>
+
     <div id="sideMenu">
         <a href="#" onclick="showPage('home')">Accueil 🏠</a>
+        <a href="#" onclick="showPage('urgence')">Urgence 🚨</a>
         <a href="#" onclick="showPage('medoc')">Médicaments 💊</a>
+        <a href="#" onclick="showPage('rdv')">Rendez-vous 📅</a>
         <a href="#" onclick="showPage('suivi')">Suivi Santé 📊</a>
+        <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;">Sauvegarder PDF 💾</a>
+        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">Fermer ✖</a>
     </div>
+
     <div id="content" class="container"></div>
+
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+        function closeMenu() { document.getElementById('sideMenu').style.width = '0'; }
+        
+        function showPage(page) {
+            closeMenu();
+            const div = document.getElementById('content');
+            if(page === 'home') {
+                div.innerHTML = `<div class="card"><h2>${new Date().toLocaleDateString()}</h2><h1>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</h1></div>`;
+            } else if(page === 'urgence') {
+                div.innerHTML = `<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>`;
+            } else if(page === 'medoc') {
+                div.innerHTML = `<div class="card"><h1>Médicaments</h1><input type="text" id="nomMedoc" placeholder="Nom"><input type="text" id="doseMedoc" placeholder="Dose"><button class="btn-green" onclick="ajouterMedoc()">Ajouter</button><div id="listeMedocs"></div></div>`;
+            } else if(page === 'rdv') {
+                div.innerHTML = `<div class="card"><h1>Rendez-vous</h1><input type="text" placeholder="Type"><input type="date"><button class="btn-green">Ajouter</button></div>`;
+            } else if(page === 'suivi') {
+                div.innerHTML = `<div class="card"><h1>Suivi Santé</h1><input type="text" id="typeMesure" placeholder="Type"><input type="text" id="valeurMesure" placeholder="Valeur"><button class="btn-green" onclick="ajouterSuivi()">Ajouter</button><div id="listeSuivi"></div></div>`;
+            }
+        }
+
+        function exporterPDF() {
+            closeMenu();
+            genererVraiPDF();
+        }
+
+        showPage('home');
+    </script>
 </body>
 </html>
