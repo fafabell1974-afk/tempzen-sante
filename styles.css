@@ -1,6 +1,25 @@
-:root { --bleu: #004080; --vert: #98FB98; --gris: #E0E0E0; }
-body { font-family: sans-serif; background: #f5f7fa; text-align: center; padding: 10px; }
-header { background: var(--bleu); color: white; padding: 20px; border-radius: 10px; }
-.card { background: white; padding: 15px; border-radius: 10px; margin: 15px auto; border: 1px solid var(--gris); max-width: 400px; }
-input { display: block; width: 90%; margin: 5px auto; padding: 10px; }
-.btn-vert { background-color: var(--vert); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+/* Style professionnel pour les formulaires */
+input { 
+    display: block; 
+    width: 100%; 
+    padding: 12px; 
+    margin: 10px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 6px; 
+    font-size: 16px; 
+}
+
+button { 
+    background-color: #004080; 
+    color: white; 
+    padding: 12px 20px; 
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    width: 100%; 
+    font-weight: bold; 
+}
+
+button:hover { background-color: #005bb5; }
+
+.card { padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
