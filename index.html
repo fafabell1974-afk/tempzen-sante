@@ -8,17 +8,18 @@
         body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
         /* Header et Menu */
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 5; }
-        .menu-btn { font-size: 30px; cursor: pointer; margin-right: 15px; padding: 5px; }
-        .logo-small { width: 40px; }
+        .menu-btn { font-size: 35px; cursor: pointer; margin-right: 15px; padding: 5px; }
+        .logo-small { width: 60px; } /* Logo en-tête agrandi */
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
-        #sideMenu a { padding: 20px; text-decoration: none; font-size: 22px; color: white; display: block; }
+        #sideMenu a { padding: 20px; text-decoration: none; font-size: 24px; color: white; display: block; }
         
         /* Contenu */
         .container { padding: 20px; }
-        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
-        .time-display { font-size: 28px; font-weight: bold; color: #333; }
-        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; box-sizing: border-box; font-size: 16px; border: 1px solid #ddd; border-radius: 8px; }
-        button { width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: none; cursor: pointer; background: #007bff; color: white; margin-top: 10px; }
+        .card { background: white; padding: 25px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+        .logo-large { width: 250px; margin-bottom: 15px; } /* Logo accueil très visible */
+        .time-display { font-size: 32px; font-weight: bold; color: #333; }
+        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; box-sizing: border-box; font-size: 18px; border: 2px solid #ddd; border-radius: 10px; }
+        button { width: 100%; padding: 20px; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; background: #007bff; color: white; margin-top: 10px; }
         .btn-red { background: #dc3545; }
     </style>
 </head>
@@ -26,8 +27,8 @@
 
     <header>
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <img src="icon-512.png" class="logo-small">
-        <h2 style="margin-left:10px;">TempZen</h2>
+        <img src="icon-512.png" class="logo-small" alt="Logo">
+        <h2 style="margin-left:15px;">TempZen</h2>
     </header>
 
     <div id="sideMenu">
@@ -39,12 +40,13 @@
     </div>
 
     <div id="mainContent" class="container">
-        </div>
+        <!-- Contenu injecté ici -->
+    </div>
 
     <script>
         function toggleMenu() {
             const menu = document.getElementById("sideMenu");
-            menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
+            menu.style.width = (menu.style.width === "280px") ? "0" : "280px";
         }
 
         function showSection(id) {
@@ -52,8 +54,15 @@
             toggleMenu();
             
             if(id === 'dashboard') {
-                content.innerHTML = `<div class="card"><img src="icon-512.png" style="width:100px;"><div class="time-display" id="clock"></div><div id="date"></div></div>
-                                     <div class="card" style="border-left: 5px solid #28a745;"><h3>📅 Prochain RDV</h3><p>Aucun RDV prévu.</p></div>`;
+                content.innerHTML = `<div class="card">
+                                        <img src="icon-512.png" class="logo-large" alt="Logo">
+                                        <div class="time-display" id="clock"></div>
+                                        <div id="date" style="font-size: 20px; margin-top: 10px;"></div>
+                                     </div>
+                                     <div class="card" style="border-left: 10px solid #28a745;">
+                                        <h2 style="margin-top:0;">📅 Prochain RDV</h2>
+                                        <p style="font-size: 18px;">Aucun RDV prévu.</p>
+                                     </div>`;
                 updateClock();
             } else if(id === 'urgence') {
                 content.innerHTML = `<div class="card"><h1>🚨 Urgence</h1><a href='tel:15'><button class='btn-red'>APPELER LE 15</button></a></div>`;
@@ -72,7 +81,6 @@
             document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         }
 
-        // Initialisation au chargement
         showSection('dashboard');
     </script>
 </body>
