@@ -7,50 +7,45 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TempZen">
-  <meta name="description" content="Gérez vos médicaments et suivez votre santé au quotidien.">
+  <meta name="description" content="Gérez vos médicaments, suivis et rendez-vous médicaux.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>TempZen</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ── Header ── -->
   <header>
-    <div class="menu-btn" onclick="openMenu()" aria-label="Menu" role="button" tabindex="0">
-      <span></span><span></span><span></span>
-    </div>
     <div class="header-logo">
       <div class="logo-mark">🩺</div>
       <h2>Temp<span>Zen</span></h2>
     </div>
+
+    <div class="nav-dropdown" style="margin-left:auto;">
+      <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()" aria-haspopup="true" aria-expanded="false">
+        ☰ &nbsp;Menu &nbsp;▾
+      </button>
+      <nav class="nav-dropdown-menu" id="navDropdown" role="menu">
+        <a class="drop-item" href="#" onclick="showPage('home');    return false;" role="menuitem">
+          <span class="drop-icon">🏠</span> Accueil
+        </a>
+        <a class="drop-item" href="#" onclick="showPage('rdv');     return false;" role="menuitem">
+          <span class="drop-icon">📅</span> Rendez-vous
+        </a>
+        <a class="drop-item" href="#" onclick="showPage('medoc');   return false;" role="menuitem">
+          <span class="drop-icon">💊</span> Médicaments
+        </a>
+        <a class="drop-item" href="#" onclick="showPage('suivi');   return false;" role="menuitem">
+          <span class="drop-icon">📊</span> Suivi Santé
+        </a>
+        <div class="drop-divider"></div>
+        <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;" role="menuitem">
+          <span class="drop-icon" style="background:var(--red-100);">🚨</span> Urgences
+        </a>
+      </nav>
+    </div>
   </header>
 
-  <!-- ── Side Menu ── -->
-  <div id="sideMenuOverlay" onclick="closeMenu()"></div>
-
-  <nav id="sideMenu" role="navigation" aria-label="Navigation principale">
-    <div class="side-menu-header">
-      <span class="app-name">🩺 TempZen</span>
-      <div class="side-close-btn" onclick="closeMenu()" role="button" tabindex="0" aria-label="Fermer">✕</div>
-    </div>
-
-    <div class="side-menu-section">
-      <div class="side-menu-label">Navigation</div>
-      <a href="#" data-page="home"    onclick="showPage('home');    return false;">
-        <span class="nav-icon">🏠</span> Accueil
-      </a>
-      <a href="#" data-page="urgence" onclick="showPage('urgence'); return false;">
-        <span class="nav-icon">🚨</span> Urgences
-      </a>
-      <a href="#" data-page="medoc"   onclick="showPage('medoc');   return false;">
-        <span class="nav-icon">💊</span> Médicaments
-      </a>
-      <a href="#" data-page="suivi"   onclick="showPage('suivi');   return false;">
-        <span class="nav-icon">📊</span> Suivi Santé
-      </a>
-    </div>
-  </nav>
-
-  <!-- ── Main ── -->
   <main id="content" role="main"></main>
 
   <script src="db.js"></script>
