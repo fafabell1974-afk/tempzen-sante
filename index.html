@@ -5,75 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
-        header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 5; }
-        .menu-btn { font-size: 35px; cursor: pointer; margin-right: 15px; padding: 5px; }
-        .logo-small { width: 60px; }
+        body { font-family: sans-serif; margin: 0; background: #f4f4f9; padding-bottom: 50px; }
+        header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
+        .logo-small { width: 50px; margin-left: 10px; }
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
-        #sideMenu a { padding: 20px; text-decoration: none; font-size: 24px; color: white; display: block; }
-        
+        #sideMenu a { padding: 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
         .container { padding: 20px; }
-        .card { background: white; padding: 25px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
-        .logo-large { width: 250px; margin-bottom: 15px; }
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; box-sizing: border-box; font-size: 18px; border: 2px solid #ddd; border-radius: 10px; }
-        button { width: 100%; padding: 20px; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; margin-top: 10px; }
-        .btn-add { background: #28a745; color: white; }
-        .btn-del { background: #dc3545; color: white; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-green { background: #28a745; color: white; }
+        .btn-red { background: #dc3545; color: white; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div class="menu-btn" onclick="document.getElementById('sideMenu').style.width='250px'">☰</div>
         <img src="icon-512.png" class="logo-small">
         <h2 style="margin-left:15px;">TempZen</h2>
     </header>
 
     <div id="sideMenu">
-        <a href="#" onclick="showSection('dashboard')">🏠 Accueil</a>
-        <a href="#" onclick="showSection('urgence')">🚨 Urgence</a>
-        <a href="#" onclick="showSection('medoc')">💊 Médicaments</a>
-        <a href="#" onclick="showSection('rdv')">📅 RDV</a>
-        <a href="#" onclick="showSection('suivi')">📊 Suivi Santé</a>
+        <a href="#" onclick="show('home')">🏠 Accueil</a>
+        <a href="#" onclick="show('medoc')">💊 Médicaments</a>
+        <a href="#" onclick="show('rdv')">📅 RDV</a>
+        <a href="#" onclick="show('suivi')">📊 Suivi</a>
+        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'">✖ Fermer</a>
     </div>
 
-    <div id="mainContent" class="container"></div>
+    <div id="main" class="container">
+        <div class="card"><h1>Bienvenue</h1><p>Choisissez une option dans le menu.</p></div>
+    </div>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById("sideMenu");
-            menu.style.width = (menu.style.width === "280px") ? "0" : "280px";
+        function show(page) {
+            document.getElementById('sideMenu').style.width = '0';
+            let main = document.getElementById('main');
+            if(page === 'home') main.innerHTML = '<div class="card"><h1>TempZen Santé</h1></div>';
+            if(page === 'medoc') main.innerHTML = '<div class="card"><h1>Médicaments</h1><input type="text" id="m" placeholder="Nom..."><button class="btn-green" onclick="alert(\'Ajouté\')">Ajouter</button><button class="btn-red" onclick="alert(\'Supprimé\')">Supprimer</button></div>';
+            if(page === 'rdv') main.innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" placeholder="Type (ex: Dentiste)"><input type="date"><input type="time"><button class="btn-green" onclick="alert(\'RDV Enregistré\')">Ajouter</button><button class="btn-red" onclick="alert(\'Supprimé\')">Supprimer</button></div>';
+            if(page === 'suivi') main.innerHTML = '<div class="card"><h1>Suivi Santé</h1><input type="text" placeholder="Type (ex: Tension)"><input type="text" placeholder="Valeur"><button class="btn-green" onclick="alert(\'Donnée ajoutée\')">Ajouter</button><button class="btn-red" onclick="alert(\'Donnée supprimée\')">Supprimer</button></div>';
         }
-
-        function showSection(id) {
-            const content = document.getElementById("mainContent");
-            toggleMenu();
-            
-            if(id === 'dashboard') {
-                content.innerHTML = `<div class="card"><img src="icon-512.png" class="logo-large"><h1>Bonjour</h1></div>`;
-            } else if(id === 'urgence') {
-                content.innerHTML = `<div class="card"><h1>🚨 Urgence</h1><a href='tel:15'><button style="background:red; color:white;">APPELER LE 15</button></a></div>`;
-            } else if(id === 'medoc') {
-                content.innerHTML = `<div class="card"><h1>💊 Médicaments</h1>
-                    <input type='text' id='nomMed' placeholder='Nom du médicament'>
-                    <button class='btn-add' onclick="alert('Médicament enregistré')">Ajouter</button>
-                    <button class='btn-del' onclick="alert('Médicament supprimé')">Supprimer</button></div>`;
-            } else if(id === 'rdv') {
-                content.innerHTML = `<div class="card"><h1>📅 Rendez-vous</h1>
-                    <input type='date' id='dDate'>
-                    <input type='time' id='dTime'>
-                    <input type='text' id='dDesc' placeholder='Type de RDV (ex: Dentiste)'>
-                    <button class='btn-add' onclick="alert('RDV pris pour le ' + document.getElementById('dDate').value)">Enregistrer</button>
-                    <button class='btn-del' onclick="alert('RDV supprimé')">Supprimer</button></div>`;
-            } else if(id === 'suivi') {
-                content.innerHTML = `<div class="card"><h1>📊 Suivi Santé</h1>
-                    <input type='text' id='sType' placeholder='Type (ex: Tension)'>
-                    <input type='text' id='sVal' placeholder='Valeur'>
-                    <button class='btn-add' onclick="alert('Donnée ajoutée')">Ajouter</button>
-                    <button class='btn-del' onclick="alert('Donnée supprimée')">Supprimer</button></div>`;
-            }
-        }
-        showSection('dashboard');
     </script>
 </body>
 </html>
