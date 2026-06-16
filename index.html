@@ -12,16 +12,11 @@
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
         #sideMenu a { padding: 15px 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
         .container { padding: 20px; }
-        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .dashboard-time { font-size: 40px; font-weight: bold; color: #333; }
-        .dashboard-date { font-size: 20px; color: #666; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         input { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-green { background: #28a745; color: white; }
         .btn-red { background: #dc3545; color: white; }
-        ul { list-style: none; padding: 0; margin-top: 20px; }
-        li { background: #fff; border: 1px solid #ddd; padding: 15px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; }
-        .del-btn { background: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -33,57 +28,51 @@
     </header>
 
     <div id="sideMenu">
-        <a href="#" onclick="showHome()">Accueil 🏠</a>
-        <a href="#" onclick="showUrgence()">Urgence 🚨</a>
-        <a href="#" onclick="showMedoc()">Médicaments 💊</a>
-        <a href="#" onclick="showRdv()">Rendez-vous 📅</a>
-        <a href="#" onclick="showSuivi()">Suivi Santé 📊</a>
+        <a href="#" onclick="showPage('home')">Accueil 🏠</a>
+        <a href="#" onclick="showPage('urgence')">Urgence 🚨</a>
+        <a href="#" onclick="showPage('medoc')">Médicaments 💊</a>
+        <a href="#" onclick="showPage('rdv')">Rendez-vous 📅</a>
+        <a href="#" onclick="showPage('suivi')">Suivi Santé 📊</a>
         <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;">Sauvegarder PDF 💾</a>
         <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">Fermer ✖</a>
     </div>
 
-    <div id="exportContent" class="container"></div>
+    <div id="content" class="container"></div>
 
     <script>
         function closeMenu() { document.getElementById('sideMenu').style.width = '0'; }
         
-        function showHome() {
+        function showPage(page) {
             closeMenu();
-            document.getElementById('exportContent').innerHTML = `
-                <div class="card">
-                    <div class="dashboard-date" id="date"></div>
-                    <div class="dashboard-time" id="clock"></div>
-                </div>`;
-            const now = new Date();
-            document.getElementById('date').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            const div = document.getElementById('content');
+            if(page === 'home') {
+                div.innerHTML = `<div class="card"><h2>${new Date().toLocaleDateString()}</h2><h1>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</h1></div>`;
+            } else if(page === 'urgence') {
+                div.innerHTML = `<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>`;
+            } else if(page === 'medoc') {
+                div.innerHTML = `<div class="card"><h1>Médicaments</h1><input type="text" id="nomM" placeholder="Nom"><input type="text" id="doseM" placeholder="Dose"><button class="btn-green" onclick="addToList('listeM', 'nomM', 'doseM')">Ajouter</button><div id="listeM"></div></div>`;
+            } else if(page === 'rdv') {
+                div.innerHTML = `<div class="card"><h1>Rendez-vous</h1><input type="text" id="nomR" placeholder="Type"><input type="date" id="dateR"><button class="btn-green" onclick="addToList('listeR', 'nomR', 'dateR')">Ajouter</button><div id="listeR"></div></div>`;
+            } else if(page === 'suivi') {
+                div.innerHTML = `<div class="card"><h1>Suivi Santé</h1><input type="text" id="nomS" placeholder="Type"><input type="text" id="valS" placeholder="Valeur"><button class="btn-green" onclick="addToList('listeS', 'nomS', 'valS')">Ajouter</button><div id="listeS"></div></div>`;
+            }
         }
 
-        function showUrgence() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>'; }
-        
-        function showMedoc() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Médicaments</h1><input type="text" id="mN" placeholder="Nom"><input type="text" id="mD" placeholder="Dose"><button class="btn-green" onclick="addItem(\'lMedoc\', \'mN\', \'mD\')">Ajouter</button><ul id="lMedoc"></ul></div>'; }
-        
-        function showRdv() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" id="rN" placeholder="Type"><input type="date" id="rD"><button class="btn-green" onclick="addItem(\'lRdv\', \'rN\', \'rD\')">Ajouter</button><ul id="lRdv"></ul></div>'; }
-        
-        function showSuivi() { closeMenu(); document.getElementById('exportContent').innerHTML = '<div class="card"><h1>Suivi Santé</h1><input type="text" id="sN" placeholder="Type"><input type="text" id="sV" placeholder="Valeur"><button class="btn-green" onclick="addItem(\'lSuivi\', \'sN\', \'sV\')">Ajouter</button><ul id="lSuivi"></ul></div>'; }
-
-        function addItem(listId, id1, id2) {
-            let val1 = document.getElementById(id1).value;
-            let val2 = document.getElementById(id2).value;
-            if(val1 && val2) {
-                let li = document.createElement('li');
-                li.innerHTML = `<div><strong>${val1}</strong><br><small>${val2}</small></div><span class="del-btn" onclick="this.parentElement.remove()">X</span>`;
-                document.getElementById(listId).appendChild(li);
-                document.getElementById(id1).value = ""; document.getElementById(id2).value = "";
+        function addToList(id, val1, val2) {
+            const v1 = document.getElementById(val1).value;
+            const v2 = document.getElementById(val2).value;
+            if(v1 && v2) {
+                document.getElementById(id).innerHTML += `<p>${v1} : ${v2}</p>`;
+                document.getElementById(val1).value = ""; document.getElementById(val2).value = "";
             }
         }
 
         function exporterPDF() {
             closeMenu();
-            html2pdf().from(document.getElementById('exportContent')).save('Carnet_Sante.pdf');
+            html2pdf().from(document.getElementById('content')).save('Carnet_Sante.pdf');
         }
 
-        showHome();
+        showPage('home');
     </script>
 </body>
 </html>
