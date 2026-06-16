@@ -9,14 +9,16 @@
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
         .logo-small { width: 50px; margin-left: 10px; }
-        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
-        #sideMenu a { padding: 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
+        
         .container { padding: 20px; }
         .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        input { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-green { background: #28a745; color: white; }
-        .btn-red { background: #dc3545; color: white; }
+        
+        ul { list-style: none; padding: 0; margin-top: 20px; }
+        li { background: #fff; border: 1px solid #ddd; padding: 15px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; }
+        .del-btn { background: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -27,27 +29,51 @@
         <h2 style="margin-left:15px;">TempZen</h2>
     </header>
 
-    <div id="sideMenu">
-        <a href="#" onclick="show('home')">🏠 Accueil</a>
-        <a href="#" onclick="show('medoc')">💊 Médicaments</a>
-        <a href="#" onclick="show('rdv')">📅 RDV</a>
-        <a href="#" onclick="show('suivi')">📊 Suivi</a>
-        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'">✖ Fermer</a>
+    <div id="sideMenu" style="height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px;">
+        <a href="#" onclick="loadPage('medoc')" style="padding: 20px; display: block; color: white; text-decoration: none; font-size: 20px;">💊 Médicaments</a>
     </div>
 
-    <div id="main" class="container">
-        <div class="card"><h1>Bienvenue</h1><p>Choisissez une option dans le menu.</p></div>
-    </div>
+    <div id="main" class="container"></div>
 
     <script>
-        function show(page) {
+        function loadPage(page) {
             document.getElementById('sideMenu').style.width = '0';
             let main = document.getElementById('main');
-            if(page === 'home') main.innerHTML = '<div class="card"><h1>TempZen Santé</h1></div>';
-            if(page === 'medoc') main.innerHTML = '<div class="card"><h1>Médicaments</h1><input type="text" id="m" placeholder="Nom..."><button class="btn-green" onclick="alert(\'Ajouté\')">Ajouter</button><button class="btn-red" onclick="alert(\'Supprimé\')">Supprimer</button></div>';
-            if(page === 'rdv') main.innerHTML = '<div class="card"><h1>Rendez-vous</h1><input type="text" placeholder="Type (ex: Dentiste)"><input type="date"><input type="time"><button class="btn-green" onclick="alert(\'RDV Enregistré\')">Ajouter</button><button class="btn-red" onclick="alert(\'Supprimé\')">Supprimer</button></div>';
-            if(page === 'suivi') main.innerHTML = '<div class="card"><h1>Suivi Santé</h1><input type="text" placeholder="Type (ex: Tension)"><input type="text" placeholder="Valeur"><button class="btn-green" onclick="alert(\'Donnée ajoutée\')">Ajouter</button><button class="btn-red" onclick="alert(\'Donnée supprimée\')">Supprimer</button></div>';
+            
+            if(page === 'medoc') {
+                main.innerHTML = `
+                    <div class="card">
+                        <h1>Médicaments</h1>
+                        <input type="text" id="inputMedoc" placeholder="Nom du médicament...">
+                        <input type="text" id="inputDose" placeholder="Dose (ex: 500mg, 1 comprimé)...">
+                        <button class="btn-green" onclick="ajouterMedoc()">Ajouter à la liste</button>
+                    </div>
+                    <ul id="listeMedocs"></ul>
+                `;
+            }
         }
+
+        function ajouterMedoc() {
+            let medoc = document.getElementById('inputMedoc');
+            let dose = document.getElementById('inputDose');
+            let liste = document.getElementById('listeMedocs');
+
+            if (medoc.value !== "" && dose.value !== "") {
+                let li = document.createElement('li');
+                li.innerHTML = `<div><strong>${medoc.value}</strong><br><small>${dose.value}</small></div>
+                                <span class="del-btn" onclick="this.parentElement.remove()">Supprimer</span>`;
+                liste.appendChild(li);
+                
+                // Vider les champs
+                medoc.value = "";
+                dose.value = "";
+            } else {
+                alert("Veuillez remplir le nom et la dose.");
+            }
+        }
+
+        // Chargement initial
+        loadPage('medoc');
     </script>
 </body>
 </html>
