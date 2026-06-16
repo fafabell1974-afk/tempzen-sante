@@ -5,9 +5,12 @@ async function ajouterMedoc() {
     const dose = document.getElementById('doseMedoc').value;
     if(nom && dose) { await addData('medicaments', { nom, dose }); chargerMedocs(); }
 }
+
 async function chargerMedocs() {
     const data = await getAll('medicaments');
-    document.getElementById('listeMedocs').innerHTML = data.map(m => `<p>${m.nom} (${m.dose})</p>`).join('');
+    document.getElementById('listeMedocs').innerHTML = data.map(m => `
+        <p>${m.nom} (${m.dose}) <button onclick="supprimerEtRecharger('medicaments', ${m.id})">Supprimer</button></p>
+    `).join('');
 }
 
 async function ajouterSuivi() {
@@ -15,9 +18,18 @@ async function ajouterSuivi() {
     const valeur = document.getElementById('valeurMesure').value;
     if(type && valeur) { await addData('suivi', { type, valeur, date: new Date().toLocaleDateString() }); chargerSuivi(); }
 }
+
 async function chargerSuivi() {
     const data = await getAll('suivi');
-    document.getElementById('listeSuivi').innerHTML = data.map(s => `<p>${s.date} : ${s.type} = ${s.valeur}</p>`).join('');
+    document.getElementById('listeSuivi').innerHTML = data.map(s => `
+        <p>${s.date} : ${s.type} = ${s.valeur} <button onclick="supprimerEtRecharger('suivi', ${s.id})">Supprimer</button></p>
+    `).join('');
+}
+
+async function supprimerEtRecharger(store, id) {
+    await deleteData(store, id);
+    if(store === 'medicaments') chargerMedocs();
+    else chargerSuivi();
 }
 
 async function genererVraiPDF() {
