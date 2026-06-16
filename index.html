@@ -6,21 +6,17 @@
     <title>TempZen Santé</title>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
-        
-        /* En-tête avec Menu */
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-btn { font-size: 24px; cursor: pointer; margin-right: 15px; }
         .logo-small { width: 40px; }
         
-        /* Menu latéral (caché par défaut) */
-        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; overflow-x: hidden; transition: 0.3s; padding-top: 60px; z-index: 10; }
+        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 60px; }
         #sideMenu a { padding: 15px; text-decoration: none; font-size: 20px; color: white; display: block; }
         
-        /* Page d'accueil */
-        .home-container { text-align: center; padding: 50px 20px; }
-        .logo-large { width: 200px; margin-bottom: 20px; }
-        
-        .card { background: white; padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .dashboard { text-align: center; padding: 20px; }
+        .card { background: white; padding: 20px; margin: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .time-display { font-size: 28px; font-weight: bold; color: #333; margin: 10px 0; }
+        .date-display { font-size: 18px; color: #666; }
     </style>
 </head>
 <body>
@@ -32,17 +28,25 @@
     </header>
 
     <div id="sideMenu">
-        <a href="javascript:void(0)" onclick="toggleMenu()">✖ Fermer</a>
-        <a href="#" onclick="showSection('home')">🏠 Accueil</a>
-        <a href="#" onclick="showSection('urgence')">🚨 Urgence</a>
-        <a href="#" onclick="showSection('medoc')">💊 Médicaments</a>
-        <a href="#" onclick="showSection('rdv')">📅 RDV</a>
+        <a href="#" onclick="location.reload()">🏠 Accueil</a>
+        <a href="#">🚨 Urgence</a>
+        <a href="#">💊 Médicaments</a>
+        <a href="#">📅 RDV</a>
     </div>
 
-    <div id="content" class="home-container">
-        <img src="icon-512.png" class="logo-large">
-        <h1>TempZen Santé</h1>
-        <p>Votre carnet de santé numérique</p>
+    <div class="dashboard">
+        <img src="icon-512.png" style="width:120px;">
+        <h1>Bonjour</h1>
+        
+        <div class="card">
+            <div class="date-display" id="date"></div>
+            <div class="time-display" id="clock"></div>
+        </div>
+
+        <div class="card" style="border-left: 5px solid #28a745;">
+            <h3>📅 Prochain RDV</h3>
+            <p id="nextRdv">Aucun RDV prévu pour le moment.</p>
+        </div>
     </div>
 
     <script>
@@ -51,13 +55,14 @@
             menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
         }
 
-        function showSection(id) {
-            const content = document.getElementById("content");
-            if(id === 'home') content.innerHTML = "<h1>TempZen Santé</h1><p>Bienvenue sur votre application.</p>";
-            else if(id === 'urgence') content.innerHTML = "<h1>Urgence</h1><a href='tel:15'><button style='padding:20px; background:red; color:white; font-size:20px;'>APPELER LE 15</button></a>";
-            else content.innerHTML = "<h1>" + id + "</h1><p>Section en construction.</p>";
-            toggleMenu();
+        // Mise à jour heure et date
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('date').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         }
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
