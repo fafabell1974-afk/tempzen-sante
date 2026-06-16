@@ -6,28 +6,26 @@
     <title>TempZen Santé</title>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
-        /* Header et Menu */
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 5; }
         .menu-btn { font-size: 35px; cursor: pointer; margin-right: 15px; padding: 5px; }
-        .logo-small { width: 60px; } /* Logo en-tête agrandi */
+        .logo-small { width: 60px; }
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
         #sideMenu a { padding: 20px; text-decoration: none; font-size: 24px; color: white; display: block; }
         
-        /* Contenu */
         .container { padding: 20px; }
         .card { background: white; padding: 25px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
-        .logo-large { width: 250px; margin-bottom: 15px; } /* Logo accueil très visible */
-        .time-display { font-size: 32px; font-weight: bold; color: #333; }
-        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; box-sizing: border-box; font-size: 18px; border: 2px solid #ddd; border-radius: 10px; }
-        button { width: 100%; padding: 20px; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; background: #007bff; color: white; margin-top: 10px; }
-        .btn-red { background: #dc3545; }
+        .logo-large { width: 250px; margin-bottom: 15px; }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; box-sizing: border-box; font-size: 18px; border: 2px solid #ddd; border-radius: 10px; }
+        button { width: 100%; padding: 20px; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; margin-top: 10px; }
+        .btn-add { background: #28a745; color: white; }
+        .btn-del { background: #dc3545; color: white; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <img src="icon-512.png" class="logo-small" alt="Logo">
+        <img src="icon-512.png" class="logo-small">
         <h2 style="margin-left:15px;">TempZen</h2>
     </header>
 
@@ -39,9 +37,7 @@
         <a href="#" onclick="showSection('suivi')">📊 Suivi Santé</a>
     </div>
 
-    <div id="mainContent" class="container">
-        <!-- Contenu injecté ici -->
-    </div>
+    <div id="mainContent" class="container"></div>
 
     <script>
         function toggleMenu() {
@@ -54,33 +50,29 @@
             toggleMenu();
             
             if(id === 'dashboard') {
-                content.innerHTML = `<div class="card">
-                                        <img src="icon-512.png" class="logo-large" alt="Logo">
-                                        <div class="time-display" id="clock"></div>
-                                        <div id="date" style="font-size: 20px; margin-top: 10px;"></div>
-                                     </div>
-                                     <div class="card" style="border-left: 10px solid #28a745;">
-                                        <h2 style="margin-top:0;">📅 Prochain RDV</h2>
-                                        <p style="font-size: 18px;">Aucun RDV prévu.</p>
-                                     </div>`;
-                updateClock();
+                content.innerHTML = `<div class="card"><img src="icon-512.png" class="logo-large"><h1>Bonjour</h1></div>`;
             } else if(id === 'urgence') {
-                content.innerHTML = `<div class="card"><h1>🚨 Urgence</h1><a href='tel:15'><button class='btn-red'>APPELER LE 15</button></a></div>`;
+                content.innerHTML = `<div class="card"><h1>🚨 Urgence</h1><a href='tel:15'><button style="background:red; color:white;">APPELER LE 15</button></a></div>`;
             } else if(id === 'medoc') {
-                content.innerHTML = `<div class="card"><h1>💊 Médicaments</h1><input type='text' placeholder='Nom du médicament'><button>Ajouter</button></div>`;
+                content.innerHTML = `<div class="card"><h1>💊 Médicaments</h1>
+                    <input type='text' id='nomMed' placeholder='Nom du médicament'>
+                    <button class='btn-add' onclick="alert('Médicament enregistré')">Ajouter</button>
+                    <button class='btn-del' onclick="alert('Médicament supprimé')">Supprimer</button></div>`;
             } else if(id === 'rdv') {
-                content.innerHTML = `<div class="card"><h1>📅 Rendez-vous</h1><input type='date'><input type='time'><button>Enregistrer</button></div>`;
+                content.innerHTML = `<div class="card"><h1>📅 Rendez-vous</h1>
+                    <input type='date' id='dDate'>
+                    <input type='time' id='dTime'>
+                    <input type='text' id='dDesc' placeholder='Type de RDV (ex: Dentiste)'>
+                    <button class='btn-add' onclick="alert('RDV pris pour le ' + document.getElementById('dDate').value)">Enregistrer</button>
+                    <button class='btn-del' onclick="alert('RDV supprimé')">Supprimer</button></div>`;
             } else if(id === 'suivi') {
-                content.innerHTML = `<div class="card"><h1>📊 Suivi Santé</h1><input type='text' placeholder='Type (Tension...)'><input type='text' placeholder='Valeur'><button>Ajouter</button></div>`;
+                content.innerHTML = `<div class="card"><h1>📊 Suivi Santé</h1>
+                    <input type='text' id='sType' placeholder='Type (ex: Tension)'>
+                    <input type='text' id='sVal' placeholder='Valeur'>
+                    <button class='btn-add' onclick="alert('Donnée ajoutée')">Ajouter</button>
+                    <button class='btn-del' onclick="alert('Donnée supprimée')">Supprimer</button></div>`;
             }
         }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('date').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-        }
-
         showSection('dashboard');
     </script>
 </body>
