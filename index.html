@@ -20,31 +20,30 @@
       <div class="logo-mark">🩺</div>
       <h2>Temp<span>Zen</span></h2>
     </div>
-
-    <div class="nav-dropdown" style="margin-left:auto;">
-      <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()" aria-haspopup="true" aria-expanded="false">
-        ☰ &nbsp;Menu &nbsp;▾
-      </button>
-      <nav class="nav-dropdown-menu" id="navDropdown" role="menu">
-        <a class="drop-item" href="#" onclick="showPage('home');    return false;" role="menuitem">
-          <span class="drop-icon">🏠</span> Accueil
-        </a>
-        <a class="drop-item" href="#" onclick="showPage('rdv');     return false;" role="menuitem">
-          <span class="drop-icon">📅</span> Rendez-vous
-        </a>
-        <a class="drop-item" href="#" onclick="showPage('medoc');   return false;" role="menuitem">
-          <span class="drop-icon">💊</span> Médicaments
-        </a>
-        <a class="drop-item" href="#" onclick="showPage('suivi');   return false;" role="menuitem">
-          <span class="drop-icon">📊</span> Suivi Santé
-        </a>
-        <div class="drop-divider"></div>
-        <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;" role="menuitem">
-          <span class="drop-icon" style="background:var(--red-100);">🚨</span> Urgences
-        </a>
-      </nav>
-    </div>
+    <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()" style="margin-left:auto;" aria-haspopup="true" aria-expanded="false">
+      ☰ &nbsp;Menu &nbsp;▾
+    </button>
   </header>
+
+  <!-- Dropdown hors du header pour éviter le clipping -->
+  <nav class="nav-dropdown-menu" id="navDropdown" role="menu">
+    <a class="drop-item" href="#" onclick="showPage('home');    return false;" role="menuitem">
+      <span class="drop-icon">🏠</span> Accueil
+    </a>
+    <a class="drop-item" href="#" onclick="showPage('rdv');     return false;" role="menuitem">
+      <span class="drop-icon">📅</span> Rendez-vous
+    </a>
+    <a class="drop-item" href="#" onclick="showPage('medoc');   return false;" role="menuitem">
+      <span class="drop-icon">💊</span> Médicaments
+    </a>
+    <a class="drop-item" href="#" onclick="showPage('suivi');   return false;" role="menuitem">
+      <span class="drop-icon">📊</span> Suivi Santé
+    </a>
+    <div class="drop-divider"></div>
+    <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;" role="menuitem">
+      <span class="drop-icon" style="background:var(--red-100);">🚨</span> Urgences
+    </a>
+  </nav>
 
   <main id="content" role="main"></main>
 
