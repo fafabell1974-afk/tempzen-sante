@@ -2,23 +2,24 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempZen Santé</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { font-family: sans-serif; margin: 0; background: #f4f4f9; padding-bottom: 50px; }
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
         .logo-small { width: 50px; margin-left: 10px; }
-        
+        #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
+        #sideMenu a { padding: 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
         .container { padding: 20px; }
         .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        input { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-green { background: #28a745; color: white; }
-        
+        .btn-pdf { background: #ffc107; color: black; }
         ul { list-style: none; padding: 0; margin-top: 20px; }
         li { background: #fff; border: 1px solid #ddd; padding: 15px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; }
-        .del-btn { background: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .del-btn { background: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -29,51 +30,46 @@
         <h2 style="margin-left:15px;">TempZen</h2>
     </header>
 
-    <div id="sideMenu" style="height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px;">
-        <a href="#" onclick="loadPage('medoc')" style="padding: 20px; display: block; color: white; text-decoration: none; font-size: 20px;">💊 Médicaments</a>
+    <div id="sideMenu">
+        <a href="#" onclick="loadPage('home')">🏠 Accueil</a>
+        <a href="#" onclick="loadPage('medoc')">💊 Médicaments</a>
+        <a href="#" onclick="loadPage('rdv')">📅 RDV</a>
+        <a href="#" onclick="loadPage('suivi')">📊 Suivi Santé</a>
+        <a href="#" onclick="exporterPDF()" style="color:#ffc107">💾 Sauvegarder PDF</a>
+        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">✖ Fermer</a>
     </div>
 
-    <div id="main" class="container"></div>
+    <div id="exportContent" class="container"></div>
 
     <script>
         function loadPage(page) {
             document.getElementById('sideMenu').style.width = '0';
-            let main = document.getElementById('main');
+            let content = document.getElementById('exportContent');
             
-            if(page === 'medoc') {
-                main.innerHTML = `
-                    <div class="card">
-                        <h1>Médicaments</h1>
-                        <input type="text" id="inputMedoc" placeholder="Nom du médicament...">
-                        <input type="text" id="inputDose" placeholder="Dose (ex: 500mg, 1 comprimé)...">
-                        <button class="btn-green" onclick="ajouterMedoc()">Ajouter à la liste</button>
-                    </div>
-                    <ul id="listeMedocs"></ul>
-                `;
-            }
+            if(page === 'home') content.innerHTML = '<div class="card"><h1>TempZen Santé</h1><p>Bienvenue dans votre carnet numérique.</p></div>';
+            else if(page === 'medoc') content.innerHTML = '<div class="card"><h1>💊 Médicaments</h1><input type="text" id="mN" placeholder="Nom"><input type="text" id="mD" placeholder="Dose"><button class="btn-green" onclick="addItem(\'lMedoc\', \'mN\', \'mD\')">Ajouter</button><ul id="lMedoc"></ul></div>';
+            else if(page === 'rdv') content.innerHTML = '<div class="card"><h1>📅 Rendez-vous</h1><input type="text" id="rN" placeholder="Type"><input type="date" id="rD"><button class="btn-green" onclick="addItem(\'lRdv\', \'rN\', \'rD\')">Ajouter</button><ul id="lRdv"></ul></div>';
+            else if(page === 'suivi') content.innerHTML = '<div class="card"><h1>📊 Suivi Santé</h1><input type="text" id="sN" placeholder="Type"><input type="text" id="sV" placeholder="Valeur"><button class="btn-green" onclick="addItem(\'lSuivi\', \'sN\', \'sV\')">Ajouter</button><ul id="lSuivi"></ul></div>';
         }
 
-        function ajouterMedoc() {
-            let medoc = document.getElementById('inputMedoc');
-            let dose = document.getElementById('inputDose');
-            let liste = document.getElementById('listeMedocs');
-
-            if (medoc.value !== "" && dose.value !== "") {
+        function addItem(listId, id1, id2) {
+            let val1 = document.getElementById(id1).value;
+            let val2 = document.getElementById(id2).value;
+            if(val1 && val2) {
                 let li = document.createElement('li');
-                li.innerHTML = `<div><strong>${medoc.value}</strong><br><small>${dose.value}</small></div>
-                                <span class="del-btn" onclick="this.parentElement.remove()">Supprimer</span>`;
-                liste.appendChild(li);
-                
-                // Vider les champs
-                medoc.value = "";
-                dose.value = "";
-            } else {
-                alert("Veuillez remplir le nom et la dose.");
+                li.innerHTML = `<div><strong>${val1}</strong><br><small>${val2}</small></div><span class="del-btn" onclick="this.parentElement.remove()">X</span>`;
+                document.getElementById(listId).appendChild(li);
+                document.getElementById(id1).value = ""; document.getElementById(id2).value = "";
             }
         }
 
-        // Chargement initial
-        loadPage('medoc');
+        function exporterPDF() {
+            document.getElementById('sideMenu').style.width = '0';
+            const element = document.getElementById('exportContent');
+            html2pdf().from(element).save('Mon_Carnet_Sante_TempZen.pdf');
+        }
+
+        loadPage('home');
     </script>
 </body>
 </html>
