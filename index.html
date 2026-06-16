@@ -3,76 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>TempZen</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="db.js"></script>
+    <script src="app.js"></script>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f9; padding-bottom: 50px; }
+        body { font-family: sans-serif; margin: 0; background: #f4f4f9; }
         header { background: #fff; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-btn { font-size: 30px; cursor: pointer; padding: 10px; }
-        .logo-small { width: 50px; margin-left: 10px; }
         #sideMenu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #333; z-index: 10; transition: 0.3s; padding-top: 70px; }
         #sideMenu a { padding: 15px 20px; display: block; color: white; text-decoration: none; font-size: 20px; }
-        .container { padding: 20px; }
-        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .btn-green { background: #28a745; color: white; }
-        .btn-red { background: #dc3545; color: white; }
     </style>
 </head>
 <body>
-
     <header>
         <div class="menu-btn" onclick="document.getElementById('sideMenu').style.width='250px'">☰</div>
-        <img src="icon-512.png" class="logo-small">
-        <h2 style="margin-left:15px;">TempZen</h2>
+        <h2>TempZen</h2>
     </header>
-
     <div id="sideMenu">
-        <a href="#" onclick="showPage('home')">Accueil</a>
-        <a href="#" onclick="showPage('urgence')">Urgence</a>
-        <a href="#" onclick="showPage('medoc')">Médicaments</a>
-        <a href="#" onclick="showPage('rdv')">Rendez-vous</a>
-        <a href="#" onclick="showPage('suivi')">Suivi Santé</a>
-        <a href="#" onclick="exporterPDF()" style="color:black; background: #ddd;">Sauvegarder PDF</a>
-        <a href="#" onclick="document.getElementById('sideMenu').style.width='0'" style="color:#aaa">Fermer</a>
+        <a href="#" onclick="showPage('home')">Accueil 🏠</a>
+        <a href="#" onclick="showPage('medoc')">Médicaments 💊</a>
+        <a href="#" onclick="showPage('suivi')">Suivi Santé 📊</a>
     </div>
-
     <div id="content" class="container"></div>
-
-    <script>
-        function closeMenu() { document.getElementById('sideMenu').style.width = '0'; }
-        
-        function showPage(page) {
-            closeMenu();
-            const div = document.getElementById('content');
-            if(page === 'home') {
-                div.innerHTML = `<div class="card"><h2>${new Date().toLocaleDateString()}</h2><h1>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</h1></div>`;
-            } else if(page === 'urgence') {
-                div.innerHTML = `<div class="card"><h1>Urgence</h1><a href="tel:15"><button class="btn-red">APPELER LE 15</button></a></div>`;
-            } else if(page === 'medoc') {
-                div.innerHTML = `<div class="card"><h1>Médicaments</h1><input type="text" id="nomM" placeholder="Nom"><input type="text" id="doseM" placeholder="Dose"><button class="btn-green" onclick="addToList('listeM', 'nomM', 'doseM')">Ajouter</button><div id="listeM"></div></div>`;
-            } else if(page === 'rdv') {
-                div.innerHTML = `<div class="card"><h1>Rendez-vous</h1><input type="text" id="nomR" placeholder="Type"><input type="date" id="dateR"><button class="btn-green" onclick="addToList('listeR', 'nomR', 'dateR')">Ajouter</button><div id="listeR"></div></div>`;
-            } else if(page === 'suivi') {
-                div.innerHTML = `<div class="card"><h1>Suivi Santé</h1><input type="text" id="nomS" placeholder="Type"><input type="text" id="valS" placeholder="Valeur"><button class="btn-green" onclick="addToList('listeS', 'nomS', 'valS')">Ajouter</button><div id="listeS"></div></div>`;
-            }
-        }
-
-        function addToList(id, val1, val2) {
-            const v1 = document.getElementById(val1).value;
-            const v2 = document.getElementById(val2).value;
-            if(v1 && v2) {
-                document.getElementById(id).innerHTML += `<p>${v1} : ${v2}</p>`;
-                document.getElementById(val1).value = ""; document.getElementById(val2).value = "";
-            }
-        }
-
-        function exporterPDF() {
-            closeMenu();
-            html2pdf().from(document.getElementById('content')).save('Carnet_Sante.pdf');
-        }
-
-        showPage('home');
-    </script>
 </body>
 </html>
