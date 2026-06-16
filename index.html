@@ -51,7 +51,6 @@
             let content = document.getElementById('exportContent');
             
             if(page === 'home') {
-                // Dashboard strictement sans icônes ni texte explicatif
                 content.innerHTML = `
                     <div class="card">
                         <div class="dashboard-date" id="date"></div>
@@ -88,7 +87,6 @@
             html2pdf().from(element).save('Mon_Carnet_Sante.pdf');
         }
 
-        // Lancement initial
         loadPage('home');
     </script>
 </body>
