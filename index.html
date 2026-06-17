@@ -25,18 +25,18 @@
     </button>
   </header>
 
-  <!-- Dropdown hors du header pour éviter le clipping -->
+  <!-- Dropdown -->
   <nav class="nav-dropdown-menu" id="navDropdown" role="menu">
-    <a class="drop-item" href="#" onclick="showPage('home');    return false;" role="menuitem">
+    <a class="drop-item" href="#" onclick="showPage('home'); return false;" role="menuitem">
       <span class="drop-icon">🏠</span> Accueil
     </a>
-    <a class="drop-item" href="#" onclick="showPage('rdv');     return false;" role="menuitem">
+    <a class="drop-item" href="#" onclick="showPage('rdv'); return false;" role="menuitem">
       <span class="drop-icon">📅</span> Rendez-vous
     </a>
-    <a class="drop-item" href="#" onclick="showPage('medoc');   return false;" role="menuitem">
+    <a class="drop-item" href="#" onclick="showPage('medoc'); return false;" role="menuitem">
       <span class="drop-icon">💊</span> Médicaments
     </a>
-    <a class="drop-item" href="#" onclick="showPage('suivi');   return false;" role="menuitem">
+    <a class="drop-item" href="#" onclick="showPage('suivi'); return false;" role="menuitem">
       <span class="drop-icon">📊</span> Suivi Santé
     </a>
     <div class="drop-divider"></div>
@@ -49,5 +49,21 @@
 
   <script src="db.js"></script>
   <script src="app.js"></script>
+  
+  <script>
+    // Enregistrement du Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then((registration) => {
+            console.log('✅ Service Worker enregistré avec succès');
+          })
+          .catch((error) => {
+            console.error('❌ Échec de l\'enregistrement du SW:', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
