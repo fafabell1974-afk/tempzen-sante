@@ -285,8 +285,10 @@ async function renderRdv(div) {
       <div class="card-body" id="listeRdv"></div>
     </div>`;
 
+  // Date par défaut = aujourd'hui
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('rdvDate').value = today;
+
   await chargerRdv();
 }
 
