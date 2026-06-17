@@ -71,8 +71,6 @@ function showPage(page) {
 async function renderHome(div) {
   const rdvList = await getAll('rdv');
   const prochain = getProchainRdv(rdvList);
-  const totalMedocs = (await getAll('medicaments')).length;
-  const totalSuivi = (await getAll('suivi')).length;
 
   div.innerHTML = `
     <div class="dashboard-clock">
@@ -83,24 +81,6 @@ async function renderHome(div) {
       <div class="clock-right">
         <div class="clock-day" id="liveDay">--</div>
         <div class="clock-week" id="liveWeek">Semaine --</div>
-      </div>
-    </div>
-
-    <div class="dashboard-stats">
-      <div class="stat-card">
-        <span class="stat-icon">💊</span>
-        <span class="stat-value">${totalMedocs}</span>
-        <span class="stat-label">Médicaments</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">📊</span>
-        <span class="stat-value">${totalSuivi}</span>
-        <span class="stat-label">Mesures</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">📅</span>
-        <span class="stat-value">${rdvList.length}</span>
-        <span class="stat-label">Rendez-vous</span>
       </div>
     </div>
 
@@ -173,20 +153,6 @@ function renderUrgence(div) {
       <a href="tel:17"   class="num-card"><div class="num-label">Sécurité</div><div class="num-value">17</div><div class="num-desc">Police</div></a>
       <a href="tel:115"  class="num-card"><div class="num-label">Social</div><div class="num-value">115</div><div class="num-desc">Sans-abri</div></a>
       <a href="tel:3114" class="num-card"><div class="num-label">Prévention</div><div class="num-value">3114</div><div class="num-desc">Suicide</div></a>
-    </div>
-
-    <div class="card" style="margin-top:16px;">
-      <div class="card-header">
-        <p class="card-title" style="font-size:15px;">📋 Conseils en cas d'urgence</p>
-      </div>
-      <div class="card-body">
-        <div class="urgence-conseil">
-          <div class="conseil-item">🫀 <span>Ne pas déplacer la personne en cas de suspicion de fracture</span></div>
-          <div class="conseil-item">🫁 <span>Vérifier la respiration et la conscience</span></div>
-          <div class="conseil-item">📱 <span>Appeler les secours en restant calme</span></div>
-          <div class="conseil-item">💊 <span>Ne rien donner à boire ou à manger</span></div>
-        </div>
-      </div>
     </div>`;
 }
 
@@ -206,10 +172,7 @@ async function renderMedoc(div) {
       </div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <p class="card-title" style="font-size:15px;">Mes médicaments</p>
-        <p class="card-subtitle" id="medocCount"></p>
-      </div>
+      <div class="card-header"><p class="card-title" style="font-size:15px;">Mes médicaments</p></div>
       <div class="card-body" id="listeMedocs"></div>
     </div>`;
   await chargerMedocs();
@@ -224,20 +187,16 @@ async function ajouterMedoc() {
 async function chargerMedocs() {
   const data = await getAll('medicaments');
   const el   = document.getElementById('listeMedocs');
-  const countEl = document.getElementById('medocCount');
   if (!el) return;
-  if (countEl) countEl.textContent = `${data.length} médicament${data.length > 1 ? 's' : ''}`;
-  
   el.innerHTML = !data.length
     ? `<p class="list-empty"><span class="empty-icon">💊</span><br>Aucun médicament enregistré</p>`
-    : data.map((m, index) => `
+    : data.map(m => `
         <div class="list-item">
-          <div class="list-item-index">${index + 1}</div>
           <div class="list-item-content">
             <div class="list-item-title">${escHtml(m.nom)}</div>
             <div class="list-item-meta">${escHtml(m.dose)}</div>
           </div>
-          <button class="btn-icon-sm" onclick="supprimerAvecConfirmation('medicaments',${m.id},'${escHtml(m.nom)}')" title="Supprimer">✕</button>
+          <button class="btn-icon-sm" onclick="supprimerEtRecharger('medicaments',${m.id})">✕</button>
         </div>`).join('');
 }
 
@@ -263,10 +222,7 @@ async function renderSuivi(div) {
       </div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <p class="card-title" style="font-size:15px;">Historique</p>
-        <p class="card-subtitle" id="suiviCount"></p>
-      </div>
+      <div class="card-header"><p class="card-title" style="font-size:15px;">Historique</p></div>
       <div class="card-body" id="listeSuivi"></div>
     </div>`;
   await chargerSuivi();
@@ -292,20 +248,16 @@ async function ajouterSuivi() {
 async function chargerSuivi() {
   const data = await getAll('suivi');
   const el   = document.getElementById('listeSuivi');
-  const countEl = document.getElementById('suiviCount');
   if (!el) return;
-  if (countEl) countEl.textContent = `${data.length} mesure${data.length > 1 ? 's' : ''}`;
-  
   el.innerHTML = !data.length
     ? `<p class="list-empty"><span class="empty-icon">📊</span><br>Aucune mesure enregistrée</p>`
-    : [...data].reverse().map((s, index) => `
+    : [...data].reverse().map(s => `
         <div class="list-item">
-          <div class="list-item-index">${index + 1}</div>
           <div class="list-item-content">
             <div class="list-item-title">${escHtml(s.type)} — <span class="badge badge-blue">${escHtml(s.valeur)}</span></div>
             <div class="list-item-meta">${escHtml(s.date)}${s.time?' · '+escHtml(s.time):''}</div>
           </div>
-          <button class="btn-icon-sm" onclick="supprimerAvecConfirmation('suivi',${s.id},'${escHtml(s.type)} - ${escHtml(s.valeur)}')" title="Supprimer">✕</button>
+          <button class="btn-icon-sm" onclick="supprimerEtRecharger('suivi',${s.id})">✕</button>
         </div>`).join('');
 }
 
@@ -329,10 +281,7 @@ async function renderRdv(div) {
       </div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <p class="card-title" style="font-size:15px;">Mes rendez-vous</p>
-        <p class="card-subtitle" id="rdvCount"></p>
-      </div>
+      <div class="card-header"><p class="card-title" style="font-size:15px;">Mes rendez-vous</p></div>
       <div class="card-body" id="listeRdv"></div>
     </div>`;
 
@@ -355,9 +304,7 @@ async function ajouterRdv() {
 async function chargerRdv() {
   const data = await getAll('rdv');
   const el   = document.getElementById('listeRdv');
-  const countEl = document.getElementById('rdvCount');
   if (!el) return;
-  if (countEl) countEl.textContent = `${data.length} rendez-vous`;
 
   if (!data.length) {
     el.innerHTML = `<p class="list-empty"><span class="empty-icon">📅</span><br>Aucun rendez-vous enregistré</p>`;
@@ -369,46 +316,29 @@ async function chargerRdv() {
   const aVenir  = sorted.filter(r => new Date(r.dateISO) >= now);
   const passes  = sorted.filter(r => new Date(r.dateISO) < now).reverse();
 
-  const renderItem = (r, index, past=false) => {
+  const renderItem = (r, past=false) => {
     const d = new Date(r.dateISO);
     const dateStr = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long'});
     return `
       <div class="list-item" style="${past?'opacity:0.5':''}">
-        <div class="list-item-index">${index + 1}</div>
         <div class="list-item-content">
           <div class="list-item-title">${escHtml(r.titre)}</div>
           <div class="list-item-meta">${dateStr}${r.heure?' · '+escHtml(r.heure):''}${r.lieu?' — '+escHtml(r.lieu):''}</div>
         </div>
-        <button class="btn-icon-sm" onclick="supprimerAvecConfirmation('rdv',${r.id},'${escHtml(r.titre)}')" title="Supprimer">✕</button>
+        <button class="btn-icon-sm" onclick="supprimerEtRecharger('rdv',${r.id})">✕</button>
       </div>`;
   };
 
   let html = '';
-  if (aVenir.length) {
-    html += `<p style="font-size:11px;font-weight:600;color:var(--blue-500);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">À venir (${aVenir.length})</p>`;
-    html += aVenir.map((r, i) => renderItem(r, i)).join('');
-  }
+  if (aVenir.length)  html += `<p style="font-size:11px;font-weight:600;color:var(--blue-500);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">À venir</p>` + aVenir.map(r=>renderItem(r)).join('');
   if (passes.length) {
     if (aVenir.length) html += `<div class="card-divider"></div>`;
-    html += `<p style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">Passés (${passes.length})</p>`;
-    html += passes.map((r, i) => renderItem(r, i, true)).join('');
+    html += `<p style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">Passés</p>` + passes.map(r=>renderItem(r,true)).join('');
   }
   el.innerHTML = html;
 }
 
 /* ── Helpers ── */
-
-// Nouvelle fonction avec confirmation
-async function supprimerAvecConfirmation(store, id, nom) {
-  if (confirm(`Êtes-vous sûr de vouloir supprimer "${nom}" ?`)) {
-    await deleteData(store, id);
-    if (store === 'medicaments') showPage('medoc');
-    else if (store === 'suivi')  showPage('suivi');
-    else                          showPage('rdv');
-  }
-}
-
-// Fonction de suppression simple (conservée pour compatibilité)
 async function supprimerEtRecharger(store, id) {
   await deleteData(store, id);
   if (store === 'medicaments') showPage('medoc');
