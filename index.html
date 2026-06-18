@@ -7,9 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TempZen">
-  <meta name="description" content="Gérez vos médicaments, suivis et rendez-vous médicaux.">
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
   <title>TempZen</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,47 +18,35 @@
       <div class="logo-mark">🩺</div>
       <h2>Temp<span>Zen</span></h2>
     </div>
-    <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()" style="margin-left:auto;" aria-haspopup="true" aria-expanded="false">
-      ☰ &nbsp;Menu &nbsp;▾
+    <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()" style="margin-left:auto;">
+      ☰ Menu ▾
     </button>
   </header>
 
-  <nav class="nav-dropdown-menu" id="navDropdown" role="menu">
-    <a class="drop-item" href="#" onclick="showPage('home');    return false;" role="menuitem">
-      <span class="drop-icon">🏠</span> Accueil
-    </a>
-    <a class="drop-item" href="#" onclick="showPage('rdv');     return false;" role="menuitem">
-      <span class="drop-icon">📅</span> Rendez-vous
-    </a>
-    <a class="drop-item" href="#" onclick="showPage('medoc');   return false;" role="menuitem">
-      <span class="drop-icon">💊</span> Médicaments
-    </a>
-    <a class="drop-item" href="#" onclick="showPage('suivi');   return false;" role="menuitem">
-      <span class="drop-icon">📊</span> Suivi Santé
-    </a>
-    <div class="drop-divider"></div>
+  <nav class="nav-dropdown-menu" id="navDropdown">
+    <a class="drop-item" href="#" onclick="showPage('home'); return false;">🏠 Accueil</a>
+    <a class="drop-item" href="#" onclick="showPage('rdv'); return false;">📅 Rendez-vous</a>
+    <a class="drop-item" href="#" onclick="showPage('medoc'); return false;">💊 Médicaments</a>
+    <a class="drop-item" href="#" onclick="showPage('suivi'); return false;">📊 Suivi Santé</a>
     
-    <a href="https://paypal.me/fafabell1974/10" target="_blank" class="drop-item-paypal">
-      <span class="drop-icon">❤️</span> Soutenir TempZen
-    </a>
-
     <div class="drop-divider"></div>
-    <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;" role="menuitem">
-      <span class="drop-icon" style="background:var(--red-100);">🚨</span> Urgences
+    <!-- Bouton PayPal -->
+    <a href="https://paypal.me/fafabell1974/10" target="_blank" class="drop-item-paypal">
+      ❤️ Soutenir TempZen
     </a>
+    <div class="drop-divider"></div>
+
+    <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;">🚨 Urgences</a>
   </nav>
 
-  <main id="content" role="main"></main>
+  <main id="content"></main>
 
   <script src="db.js"></script>
   <script src="app.js"></script>
-
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('Service Worker enregistré:', reg))
-          .catch(err => console.log('Erreur SW:', err));
+        navigator.serviceWorker.register('./sw.js');
       });
     }
   </script>
