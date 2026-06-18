@@ -7,7 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TempZen">
+  
   <link rel="manifest" href="manifest.json">
+  
   <title>TempZen</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -28,7 +30,9 @@
     <a class="drop-item" href="#" onclick="showPage('rdv'); return false;">📅 Rendez-vous</a>
     <a class="drop-item" href="#" onclick="showPage('medoc'); return false;">💊 Médicaments</a>
     <a class="drop-item" href="#" onclick="showPage('suivi'); return false;">📊 Suivi Santé</a>
+    
     <div class="drop-divider"></div>
+    
     <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;">🚨 Urgences</a>
   </nav>
 
@@ -37,9 +41,11 @@
   <script src="db.js"></script>
   <script src="app.js"></script>
   <script>
+    // Enregistrement du Service Worker pour le mode hors-ligne
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js');
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('Service Worker enregistré !'));
       });
     }
   </script>
