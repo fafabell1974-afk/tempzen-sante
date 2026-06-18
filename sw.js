@@ -1,27 +1,42 @@
-/* ── sw.js corrigé ── */
+/* ── Configuration du Service Worker TempZen ── */
 
-// 1. Incrémentez la version pour forcer le navigateur à vider l'ancien cache
-const CACHE = 'tempzen-offline-v3'; 
+const CACHE_NAME = 'tempzen-offline-v4'; // Incrémentez le numéro si vous modifiez des fichiers
+const ASSETS = [
+    '/',
+    '/index.html',
+    '/styles.css',
+    '/app.js',
+    '/db.js',
+    '/icon-192.png',
+    '/icon-512.png'
+];
 
-self.addEventListener('install', (e) => {
-    e.waitUntil(
-        caches.open(CACHE).then(c => 
-            // 2. Ajoutez 'styles.css' ici
-            c.addAll(['/', 'index.html', 'app.js', 'db.js', 'styles.css'])
-        )
+// Installation : Mise en cache des fichiers
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(ASSETS);
+        })
     );
 });
 
-self.addEventListener('activate', (e) => {
-    e.waitUntil(
-        caches.keys().then(keys => 
-            Promise.all(keys.map(k => k !== CACHE ? caches.delete(k) : null))
-        )
+// Activation : Nettoyage des anciens caches
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((keys) => {
+            return Promise.all(
+                keys.filter((key) => key !== CACHE_NAME)
+                    .map((key) => caches.delete(key))
+            );
+        })
     );
 });
 
-self.addEventListener('fetch', (e) => {
-    e.respondWith(
-        caches.match(e.request).then(res => res || fetch(e.request))
+// Fetch : Interception des requêtes pour servir le cache hors ligne
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
     );
 });
