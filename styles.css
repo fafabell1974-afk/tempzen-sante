@@ -1,20 +1,21 @@
-body { font-family: sans-serif; margin: 0; background-color: #f4f4f4; }
-header { display: flex; align-items: center; padding: 15px; background-color: #0A2540; color: white; }
-.nav-trigger { background: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
-.nav-dropdown-menu { display: none; flex-direction: column; background: white; border-bottom: 2px solid #0A2540; }
+body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+
+header { display: flex; align-items: center; padding: 10px; background-color: #0A2540; color: white; }
+
+.header-logo { display: flex; align-items: center; }
+
+.logo-mark { font-size: 24px; margin-right: 10px; }
+
+.nav-trigger { background: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-left: auto; }
+
+.nav-dropdown-menu { display: none; flex-direction: column; background: white; border-top: 1px solid #ccc; }
+
 .nav-dropdown-menu.show { display: flex; }
-.drop-item { padding: 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }
-.drop-divider { height: 10px; background: #eee; }
+
+.drop-item { padding: 15px; text-decoration: none; color: #333; display: flex; align-items: center; border-bottom: 1px solid #eee; }
+
+.drop-divider { height: 1px; background: #eee; margin: 5px 0; }
+
 .danger { color: #d32f2f; font-weight: bold; }
 
-/* Nouveau style bouton PayPal */
-.drop-item-paypal {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    text-decoration: none;
-    color: #0070ba;
-    font-weight: bold;
-    background-color: #eef7ff;
-}
-.drop-item-paypal:hover { background-color: #dbeaff; }
+.drop-icon { margin-right: 10px; }
