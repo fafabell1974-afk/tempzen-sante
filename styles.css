@@ -1,25 +1,16 @@
 body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-
 header { display: flex; align-items: center; padding: 15px; background-color: #0A2540; color: white; }
-
 .header-logo { display: flex; align-items: center; }
-
 .logo-mark { font-size: 24px; margin-right: 10px; }
-
 .nav-trigger { background: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-left: auto; }
 
+/* Menu masqué par défaut */
 .nav-dropdown-menu { display: none; flex-direction: column; background: white; border-top: 1px solid #ccc; }
 
-.nav-dropdown-menu.show { display: flex; }
+/* Classe .open activée par le JavaScript */
+.nav-dropdown-menu.open { display: flex; }
 
 .drop-item { padding: 15px; text-decoration: none; color: #333; display: flex; align-items: center; border-bottom: 1px solid #eee; }
-
 .drop-divider { height: 1px; background: #eee; margin: 5px 0; }
-
 .danger { color: #d32f2f; font-weight: bold; }
-
 #content { padding: 20px; }
-
-.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-.dash-card { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
