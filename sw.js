@@ -1,32 +1,34 @@
-/* ── sw.js corrigé pour GitHub Pages ── */
-
-const CACHE = 'tempzen-offline-v4'; 
+const CACHE_NAME = 'tempzen-sante-v1';
 const ASSETS = [
-    './',
-    './index.html',
-    './styles.css',
-    './app.js',
-    './db.js',
-    './icon-192.png',
-    './icon-512.png'
+  './',
+  './index.html',
+  './app.js',
+  './db.js',
+  './manifest.json'
 ];
 
-self.addEventListener('install', (e) => {
-    e.waitUntil(
-        caches.open(CACHE).then(c => c.addAll(ASSETS))
-    );
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+  );
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-    e.waitUntil(
-        caches.keys().then(keys => 
-            Promise.all(keys.map(k => k !== CACHE ? caches.delete(k) : null))
-        )
-    );
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
+    )
+  );
+  self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-    e.respondWith(
-        caches.match(e.request).then(res => res || fetch(e.request))
-    );
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request).catch(() => caches.match('./index.html'));
+    })
+  );
 });
