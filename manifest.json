@@ -1,4 +1,5 @@
 {
+  "id": "/tempzen-sante/",
   "name": "TempZen Santé",
   "short_name": "TempZen",
   "description": "Votre application de suivi de santé personnel",
@@ -6,11 +7,13 @@
   "display": "standalone",
   "background_color": "#0A2540",
   "theme_color": "#0A2540",
+  "scope": "/",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/2966/2966384.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
