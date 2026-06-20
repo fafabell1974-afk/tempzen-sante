@@ -2,50 +2,32 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0A2540">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TempZen">
-  <meta name="description" content="Gérez vos médicaments, suivis et rendez-vous médicaux.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
   <title>TempZen</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <header>
     <div class="header-logo">
       <div class="logo-mark">🩺</div>
       <h2>Temp<span>Zen</span></h2>
     </div>
-    <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()" style="margin-left:auto;" aria-haspopup="true" aria-expanded="false">
-      ☰ &nbsp;Menu &nbsp;▾
+    <button class="nav-trigger" id="navTrigger" onclick="toggleMenu()">
+      ☰ Menu ▾
     </button>
   </header>
 
-  <!-- Dropdown hors du header pour éviter le clipping -->
-  <nav class="nav-dropdown-menu" id="navDropdown" role="menu">
-    <a class="drop-item" href="#" onclick="showPage('home');    return false;" role="menuitem">
-      <span class="drop-icon">🏠</span> Accueil
-    </a>
-    <a class="drop-item" href="#" onclick="showPage('rdv');     return false;" role="menuitem">
-      <span class="drop-icon">📅</span> Rendez-vous
-    </a>
-    <a class="drop-item" href="#" onclick="showPage('medoc');   return false;" role="menuitem">
-      <span class="drop-icon">💊</span> Médicaments
-    </a>
-    <a class="drop-item" href="#" onclick="showPage('suivi');   return false;" role="menuitem">
-      <span class="drop-icon">📊</span> Suivi Santé
-    </a>
+  <nav class="nav-dropdown-menu" id="navDropdown">
+    <a class="drop-item" href="#" onclick="showPage('home'); return false;">🏠 Accueil</a>
+    <a class="drop-item" href="#" onclick="showPage('rdv'); return false;">📅 Rendez-vous</a>
+    <a class="drop-item" href="#" onclick="showPage('medoc'); return false;">💊 Médicaments</a>
+    <a class="drop-item" href="#" onclick="showPage('suivi'); return false;">📊 Suivi Santé</a>
     <div class="drop-divider"></div>
-    <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;" role="menuitem">
-      <span class="drop-icon" style="background:var(--red-100);">🚨</span> Urgences
-    </a>
+    <a class="drop-item danger" href="#" onclick="showPage('urgence'); return false;">🚨 Urgences</a>
   </nav>
 
-  <main id="content" role="main"></main>
+  <main id="content"></main>
 
   <script src="db.js"></script>
   <script src="app.js"></script>
