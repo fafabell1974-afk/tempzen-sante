@@ -1,7 +1,9 @@
+// db.js - Gestion de la base de données
 let db;
 const DB_NAME = 'TempZenDB';
 const DB_VERSION = 1;
 
+// Initialisation de la base
 function initDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -16,11 +18,11 @@ function initDB() {
   });
 }
 
+// Fonctions utilitaires
 function getAll(storeName) {
   return new Promise((resolve) => {
     const transaction = db.transaction(storeName, 'readonly');
-    const store = transaction.objectStore(storeName);
-    const request = store.getAll();
+    const request = transaction.objectStore(storeName).getAll();
     request.onsuccess = () => resolve(request.result);
   });
 }
@@ -28,8 +30,7 @@ function getAll(storeName) {
 function addData(storeName, data) {
   return new Promise((resolve) => {
     const transaction = db.transaction(storeName, 'readwrite');
-    const store = transaction.objectStore(storeName);
-    store.add(data);
+    transaction.objectStore(storeName).add(data);
     transaction.oncomplete = () => resolve();
   });
 }
@@ -37,8 +38,7 @@ function addData(storeName, data) {
 function deleteData(storeName, id) {
   return new Promise((resolve) => {
     const transaction = db.transaction(storeName, 'readwrite');
-    const store = transaction.objectStore(storeName);
-    store.delete(id);
+    transaction.objectStore(storeName).delete(id);
     transaction.oncomplete = () => resolve();
   });
 }
