@@ -37,8 +37,6 @@ async function refreshAll() {
   const meds = await getAll('medicaments');
   const suivi = await getAll('suivi');
 
-  rdv.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-
   document.getElementById('rdvList').innerHTML = rdv.length
     ? rdv.map(i => `
       <div class="item">
@@ -54,7 +52,7 @@ async function refreshAll() {
         </div>
       </div>
     `).join('')
-    : '<p style="color:#5c6b7a">Aucun rendez-vous.</p>';
+    : '<p style="color:#5c6b7a">Aucun rendez-vous ajouté.</p>';
 
   document.getElementById('medList').innerHTML = meds.length
     ? meds.map(i => `
@@ -70,7 +68,7 @@ async function refreshAll() {
         </div>
       </div>
     `).join('')
-    : '<p style="color:#5c6b7a">Aucun médicament.</p>';
+    : '<p style="color:#5c6b7a">Aucun médicament ajouté.</p>';
 
   document.getElementById('suiviList').innerHTML = suivi.length
     ? suivi.map(i => `
@@ -87,7 +85,7 @@ async function refreshAll() {
         </div>
       </div>
     `).join('')
-    : '<p style="color:#5c6b7a">Aucune mesure enregistrée.</p>';
+    : '<p style="color:#5c6b7a">Aucune mesure ajoutée.</p>';
 }
 
 async function saveRdv() {
