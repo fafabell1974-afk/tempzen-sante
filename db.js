@@ -1,12 +1,10 @@
-// db.js - Gestion de la base de données
+// db.js
 let db;
 const DB_NAME = 'TempZenDB';
-const DB_VERSION = 1;
 
-// Initialisation de la base
 function initDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    const request = indexedDB.open(DB_NAME, 1);
     request.onupgradeneeded = (e) => {
       db = e.target.result;
       if (!db.objectStoreNames.contains('rdv')) db.createObjectStore('rdv', { keyPath: 'id', autoIncrement: true });
@@ -18,27 +16,25 @@ function initDB() {
   });
 }
 
-// Fonctions utilitaires
-function getAll(storeName) {
-  return new Promise((resolve) => {
-    const transaction = db.transaction(storeName, 'readonly');
-    const request = transaction.objectStore(storeName).getAll();
-    request.onsuccess = () => resolve(request.result);
+async function getAll(store) {
+  return new Promise(res => {
+    const tx = db.transaction(store, 'readonly');
+    tx.objectStore(store).getAll().onsuccess = (e) => res(e.target.result);
   });
 }
 
-function addData(storeName, data) {
-  return new Promise((resolve) => {
-    const transaction = db.transaction(storeName, 'readwrite');
-    transaction.objectStore(storeName).add(data);
-    transaction.oncomplete = () => resolve();
+async function addData(store, data) {
+  return new Promise(res => {
+    const tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).add(data);
+    tx.oncomplete = () => res();
   });
 }
 
-function deleteData(storeName, id) {
-  return new Promise((resolve) => {
-    const transaction = db.transaction(storeName, 'readwrite');
-    transaction.objectStore(storeName).delete(id);
-    transaction.oncomplete = () => resolve();
+async function deleteData(store, id) {
+  return new Promise(res => {
+    const tx = db.transaction(store, 'readwrite');
+    tx.objectStore(store).delete(id);
+    tx.oncomplete = () => res();
   });
 }
