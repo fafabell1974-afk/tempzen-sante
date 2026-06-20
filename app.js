@@ -92,7 +92,9 @@ async function saveRdv() {
   const title = document.getElementById('rdvTitle').value.trim();
   const date = document.getElementById('rdvDate').value;
   const note = document.getElementById('rdvNote').value.trim();
+
   if (!title && !date && !note) return;
+
   await addData('rdv', { title, date, note, createdAt: new Date().toISOString() });
   document.getElementById('rdvTitle').value = '';
   document.getElementById('rdvDate').value = '';
@@ -103,7 +105,9 @@ async function saveRdv() {
 async function saveMed() {
   const name = document.getElementById('medName').value.trim();
   const dose = document.getElementById('medDose').value.trim();
+
   if (!name && !dose) return;
+
   await addData('medicaments', { name, dose, createdAt: new Date().toISOString() });
   document.getElementById('medName').value = '';
   document.getElementById('medDose').value = '';
@@ -113,7 +117,9 @@ async function saveMed() {
 async function saveSuivi() {
   const type = document.getElementById('suiviType').value;
   const value = document.getElementById('suiviValue').value.trim();
+
   if (!value) return;
+
   await addData('suivi', { type, value, date: new Date().toISOString(), createdAt: new Date().toISOString() });
   document.getElementById('suiviValue').value = '';
   await refreshAll();
