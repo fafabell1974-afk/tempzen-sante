@@ -128,17 +128,19 @@ function loadRdv(){
 
 function addSuivi(){
   let texte = document.getElementById("suiviTexte").value.trim();
+  let valeur = document.getElementById("suiviValeur").value.trim();
 
-  if(!texte){
-    alert("Entrez une mesure.");
+  if(!texte || !valeur){
+    alert("Entrez le type de mesure et la valeur.");
     return;
   }
 
   let date = new Date().toLocaleDateString("fr-FR");
 
-  addData("suivi", { texte: texte, date: date })
+  addData("suivi", { texte: texte, valeur: valeur, date: date })
     .then(function(){
       document.getElementById("suiviTexte").value = "";
+      document.getElementById("suiviValeur").value = "";
       loadSuivi();
     })
     .catch(function(err){
@@ -156,7 +158,7 @@ function loadSuivi(){
       div.className = "item";
       div.innerHTML = `
         <div>
-          <b>${item.texte}</b>
+          <b>${item.texte} : ${item.valeur}</b>
           <div class="small">${item.date}</div>
         </div>
         <button>Supprimer</button>
@@ -169,5 +171,4 @@ function loadSuivi(){
       list.appendChild(div);
     });
   });
-}
-  
+        }
