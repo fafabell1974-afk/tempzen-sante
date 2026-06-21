@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", function(){
 function showPage(page){
 
   document.querySelectorAll(".page")
-  .forEach(p=>p.classList.add("hidden"));
+  .forEach(function(p){
+    p.classList.add("hidden");
+  });
 
   let target=document.getElementById(page);
 
@@ -29,7 +31,6 @@ function showPage(page){
   }
 
 }
-
 
 
 
@@ -44,14 +45,17 @@ if(!nom)return;
 
 
 addData("medicaments",{
-nom,
-dose,
+nom:nom,
+dose:dose,
 fait:false
 })
-.then(()=>{
+.then(function(){
+
 document.getElementById("medNom").value="";
 document.getElementById("medDose").value="";
+
 loadMeds();
+
 });
 
 }
@@ -60,15 +64,16 @@ loadMeds();
 
 function loadMeds(){
 
-getData("medicaments").then(items=>{
+getData("medicaments").then(function(items){
 
 let list=document.getElementById("medList");
+
 list.innerHTML="";
 
 
-items.forEach(i=>{
+items.forEach(function(i){
 
-list.innerHTML+=`
+list.innerHTML += `
 
 <div class="item">
 
@@ -93,6 +98,7 @@ Supprimer
 
 
 
+
 // ===== RDV =====
 
 
@@ -107,9 +113,9 @@ if(!nom)return;
 
 
 addData("rdv",{
-nom,
-date,
-heure
+nom:nom,
+date:date,
+heure:heure
 })
 .then(loadRdv);
 
@@ -119,14 +125,14 @@ heure
 
 function loadRdv(){
 
-getData("rdv").then(items=>{
+getData("rdv").then(function(items){
 
 let list=document.getElementById("rdvList");
 
 list.innerHTML="";
 
 
-items.forEach(i=>{
+items.forEach(function(i){
 
 list.innerHTML+=`
 
@@ -135,7 +141,7 @@ list.innerHTML+=`
 <b>${i.nom}</b>
 
 <div class="small">
-${i.date} ${i.heure||""}
+${i.date} ${i.heure || ""}
 </div>
 
 <button onclick="deleteData('rdv',${i.id}).then(loadRdv)">
@@ -156,6 +162,7 @@ Supprimer
 
 
 
+
 // ===== SUIVI =====
 
 
@@ -169,9 +176,11 @@ if(!texte)return;
 
 
 addData("suivi",{
-texte,
-valeur,
+
+texte:texte,
+valeur:valeur,
 date:new Date().toLocaleDateString()
+
 })
 .then(loadSuivi);
 
@@ -179,16 +188,17 @@ date:new Date().toLocaleDateString()
 
 
 
+
 function loadSuivi(){
 
-getData("suivi").then(items=>{
+getData("suivi").then(function(items){
 
 let list=document.getElementById("suiviList");
 
 list.innerHTML="";
 
 
-items.forEach(i=>{
+items.forEach(function(i){
 
 list.innerHTML+=`
 
@@ -212,6 +222,7 @@ list.innerHTML+=`
 
 
 
+
 // ===== URGENCE =====
 
 
@@ -225,8 +236,10 @@ if(!nom)return;
 
 
 addData("contacts",{
-nom,
-tel
+
+nom:nom,
+tel:tel
+
 })
 .then(loadContacts);
 
@@ -236,14 +249,14 @@ tel
 
 function loadContacts(){
 
-getData("contacts").then(items=>{
+getData("contacts").then(function(items){
 
 let list=document.getElementById("contactList");
 
 list.innerHTML="";
 
 
-items.forEach(i=>{
+items.forEach(function(i){
 
 list.innerHTML+=`
 
@@ -271,34 +284,43 @@ list.innerHTML+=`
 
 
 
-// ===== ORDONNANCES AVEC PHOTO =====
+
+// ===== ORDONNANCES AVEC IMAGE =====
 
 
 function addOrdonnance(){
 
+
 let nom=document.getElementById("ordonnanceNom").value.trim();
+
 let date=document.getElementById("ordonnanceDate").value;
 
 let file=document.getElementById("ordonnanceImage").files[0];
 
 
 if(!nom){
+
 alert("Nom obligatoire");
+
 return;
+
 }
 
 
 
-function save(image){
+
+function enregistrer(image){
+
 
 addData("ordonnances",{
 
-nom,
-date,
+nom:nom,
+date:date,
 image:image || ""
 
 })
-.then(()=>{
+
+.then(function(){
 
 document.getElementById("ordonnanceNom").value="";
 document.getElementById("ordonnanceDate").value="";
@@ -308,38 +330,65 @@ loadOrdonnances();
 
 });
 
+
 }
 
 
 
 if(file){
 
+
+let type=file.type;
+
+
+if(
+type !== "image/jpeg" &&
+type !== "image/png" &&
+type !== "image/webp"
+){
+
+alert("Format accepté : JPG PNG WEBP");
+
+return;
+
+}
+
+
+
 let reader=new FileReader();
+
 
 reader.onload=function(e){
 
-save(e.target.result);
+enregistrer(e.target.result);
 
 };
+
+
 
 reader.readAsDataURL(file);
 
 
+
 }else{
 
-save("");
+
+enregistrer("");
 
 }
 
 
 }
+
+
 
 
 
 
 function loadOrdonnances(){
 
-getData("ordonnances").then(items=>{
+
+getData("ordonnances").then(function(items){
 
 
 let list=document.getElementById("ordonnanceList");
@@ -347,25 +396,32 @@ let list=document.getElementById("ordonnanceList");
 list.innerHTML="";
 
 
-items.forEach(i=>{
+
+items.forEach(function(i){
 
 
-list.innerHTML+=`
+list.innerHTML += `
 
 <div class="item">
 
+
 <b>${i.nom}</b>
+
 
 <div class="small">
 ${i.date || ""}
 </div>
 
 
+
 ${i.image ? 
-`<a href="${i.image}" target="_blank">
+`
+<a href="${i.image}" target="_blank">
 📷 Voir ordonnance
-</a>` 
+</a>
+`
 : ""}
+
 
 
 <button onclick="deleteData('ordonnances',${i.id}).then(loadOrdonnances)">
@@ -383,4 +439,4 @@ Supprimer
 });
 
 
-              }
+  }
