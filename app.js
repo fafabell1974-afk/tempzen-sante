@@ -1,3 +1,4 @@
+alert("TempZen JS chargé");
 let dbReady = false;
 
 
