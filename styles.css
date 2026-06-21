@@ -1,16 +1,186 @@
-body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-header { display: flex; align-items: center; padding: 15px; background-color: #0A2540; color: white; }
-.header-logo { display: flex; align-items: center; }
-.logo-mark { font-size: 24px; margin-right: 10px; }
-.nav-trigger { background: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-left: auto; }
+* {
+box-sizing:border-box;
+}
 
-/* Menu masqué par défaut */
-.nav-dropdown-menu { display: none; flex-direction: column; background: white; border-top: 1px solid #ccc; }
 
-/* Classe .open activée par le JavaScript */
-.nav-dropdown-menu.open { display: flex; }
+body {
 
-.drop-item { padding: 15px; text-decoration: none; color: #333; display: flex; align-items: center; border-bottom: 1px solid #eee; }
-.drop-divider { height: 1px; background: #eee; margin: 5px 0; }
-.danger { color: #d32f2f; font-weight: bold; }
-#content { padding: 20px; }
+margin:0;
+font-family:Arial, sans-serif;
+background:#f5f7fa;
+color:#222;
+
+}
+
+
+.header {
+
+display:flex;
+align-items:center;
+gap:15px;
+padding:20px;
+
+background:#0f766e;
+color:white;
+
+}
+
+
+.logo {
+
+width:70px;
+height:70px;
+border-radius:15px;
+
+}
+
+
+h1 {
+
+margin:0;
+font-size:26px;
+
+}
+
+
+h2 {
+
+font-size:24px;
+
+}
+
+
+
+nav {
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+padding:15px;
+
+}
+
+
+button {
+
+background:#0f766e;
+color:white;
+
+border:none;
+border-radius:15px;
+
+padding:16px;
+
+font-size:18px;
+
+cursor:pointer;
+
+}
+
+
+button:hover {
+
+opacity:.9;
+
+}
+
+
+
+main {
+
+padding:15px;
+
+}
+
+
+
+.page {
+
+background:white;
+border-radius:20px;
+
+padding:20px;
+
+box-shadow:0 3px 10px #0002;
+
+}
+
+
+
+.hidden {
+
+display:none;
+
+}
+
+
+
+
+input {
+
+width:100%;
+
+padding:15px;
+
+margin:8px 0;
+
+border-radius:12px;
+
+border:1px solid #ccc;
+
+font-size:18px;
+
+}
+
+
+
+.item {
+
+margin-top:15px;
+
+padding:15px;
+
+background:#eef6f5;
+
+border-radius:15px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:10px;
+
+}
+
+
+
+.item button {
+
+background:#dc2626;
+
+padding:10px;
+
+font-size:14px;
+
+}
+
+
+
+.check {
+
+width:25px;
+height:25px;
+
+}
+
+
+
+.small {
+
+font-size:16px;
+
+color:#555;
+
+}
