@@ -5,8 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="theme-color" content="#0f766e">
 
@@ -22,13 +21,19 @@ content="width=device-width, initial-scale=1">
 <body>
 
 
+<div class="app">
+
+
 <header class="header">
 
 <img src="./icon-192.png" class="logo">
 
 <div>
+
 <h1>TempZen Santé</h1>
-<p>Votre assistant santé simple</p>
+
+<p>Assistant santé simple</p>
+
 </div>
 
 </header>
@@ -37,9 +42,11 @@ content="width=device-width, initial-scale=1">
 
 <nav>
 
+
 <button onclick="showPage('accueil')">
 🏠 Accueil
 </button>
+
 
 <button onclick="showPage('medicaments')">
 💊 Médicaments
@@ -60,45 +67,57 @@ content="width=device-width, initial-scale=1">
 
 
 
-<main>
-
 
 
 <section id="accueil" class="page">
 
+
 <h2>Bienvenue</h2>
 
 <p>
-Gérez vos médicaments, rendez-vous et suivi santé.
+Votre espace santé personnel.
 </p>
 
+
 </section>
+
+
 
 
 
 
 <section id="medicaments" class="page hidden">
 
-<h2>💊 Mes médicaments</h2>
+
+<h2>💊 Médicaments</h2>
+
 
 
 <input id="medNom"
 placeholder="Nom du médicament">
 
 
+
 <input id="medDose"
-placeholder="Dosage / matin midi soir">
+placeholder="Dosage (ex: 100 mg matin midi soir)">
+
 
 
 <button onclick="addMed()">
-➕ Ajouter
+
+Ajouter
+
 </button>
+
 
 
 <div id="medList"></div>
 
 
+
 </section>
+
+
 
 
 
@@ -107,7 +126,8 @@ placeholder="Dosage / matin midi soir">
 <section id="rdv" class="page hidden">
 
 
-<h2>📅 Mes rendez-vous</h2>
+<h2>📅 Rendez-vous</h2>
+
 
 
 <input id="rdvNom"
@@ -123,7 +143,9 @@ type="time">
 
 
 <button onclick="addRdv()">
-➕ Ajouter
+
+Ajouter
+
 </button>
 
 
@@ -136,29 +158,36 @@ type="time">
 
 
 
+
+
+
 <section id="suivi" class="page hidden">
 
 
 <h2>❤️ Suivi santé</h2>
 
 
+
 <input id="suiviTexte"
 placeholder="Ex : tension 13/8">
 
 
+
 <button onclick="addSuivi()">
-➕ Ajouter
+
+Ajouter
+
 </button>
+
 
 
 <div id="suiviList"></div>
 
 
+
 </section>
 
 
-
-</main>
 
 
 
@@ -166,6 +195,19 @@ placeholder="Ex : tension 13/8">
 <script src="./db.js"></script>
 
 <script src="./app.js"></script>
+
+
+
+
+<script>
+
+if ("serviceWorker" in navigator){
+
+navigator.serviceWorker.register("./sw.js");
+
+}
+
+</script>
 
 
 
