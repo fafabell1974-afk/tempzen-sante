@@ -63,6 +63,11 @@
 </button>
 
 
+<button onclick="showPage('urgence')">
+🚨 Urgence
+</button>
+
+
 </nav>
 
 
@@ -187,6 +192,48 @@ Ajouter
 
 <div id="suiviList"></div>
 
+
+
+</section>
+
+
+
+
+
+
+<section id="urgence" class="page hidden">
+
+
+<h2>🚨 Urgence</h2>
+
+
+<a href="tel:15" class="btn-urgence-15">
+
+📞 Appeler le 15 (SAMU)
+
+</a>
+
+
+<h3>Personnes à contacter</h3>
+
+
+<input id="contactNom"
+placeholder="Nom (ex : Marie, fille)">
+
+
+<input id="contactTel"
+type="tel"
+placeholder="Numéro de téléphone">
+
+
+<button onclick="addContact()">
+
+Ajouter
+
+</button>
+
+
+<div id="contactList"></div>
 
 
 </section>
