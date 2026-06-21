@@ -1,53 +1,168 @@
 let db;
-const DB_NAME = 'TempZenDB';
-const DB_VERSION = 5; // Augmenté à 5 pour écraser l'ancienne version
+
 
 function initDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    
-    request.onupgradeneeded = (e) => {
-      db = e.target.result;
-      // Recréer les stores si nécessaire
-      if (!db.objectStoreNames.contains('rdv')) db.createObjectStore('rdv', { keyPath: 'id', autoIncrement: true });
-      if (!db.objectStoreNames.contains('medicaments')) db.createObjectStore('medicaments', { keyPath: 'id', autoIncrement: true });
-      if (!db.objectStoreNames.contains('suivi')) db.createObjectStore('suivi', { keyPath: 'id', autoIncrement: true });
-    };
-    
-    request.onsuccess = (e) => { 
-      db = e.target.result; 
-      resolve(); 
-    };
-    request.onerror = (e) => reject(e.target.error);
-  });
+
+return new Promise((resolve,reject)=>{
+
+
+const request = indexedDB.open("TempZenDB",1);
+
+
+
+request.onupgradeneeded = function(e){
+
+db = e.target.result;
+
+
+if(!db.objectStoreNames.contains("medicaments")){
+
+db.createObjectStore("medicaments",
+{
+keyPath:"id",
+autoIncrement:true
+});
+
 }
 
-// Vérification de sécurité avant toute opération
-function getDb() {
-  if (!db) throw new Error("Base de données non initialisée");
-  return db;
+
+
+if(!db.objectStoreNames.contains("rdv")){
+
+db.createObjectStore("rdv",
+{
+keyPath:"id",
+autoIncrement:true
+});
+
 }
 
-async function getAll(storeName) {
-  return new Promise((resolve) => {
-    const transaction = getDb().transaction(storeName, 'readonly');
-    const request = transaction.objectStore(storeName).getAll();
-    request.onsuccess = () => resolve(request.result);
-  });
+
+
+if(!db.objectStoreNames.contains("suivi")){
+
+db.createObjectStore("suivi",
+{
+keyPath:"id",
+autoIncrement:true
+});
+
 }
 
-async function addData(storeName, data) {
-  return new Promise((resolve) => {
-    const transaction = getDb().transaction(storeName, 'readwrite');
-    transaction.objectStore(storeName).add(data);
-    transaction.oncomplete = () => resolve();
-  });
+
+};
+
+
+
+request.onsuccess=function(e){
+
+db=e.target.result;
+resolve();
+
+};
+
+
+
+request.onerror=function(e){
+
+reject(e);
+
+};
+
+
+
+});
+
+
 }
 
-async function deleteData(storeName, id) {
-  return new Promise((resolve) => {
-    const transaction = getDb().transaction(storeName, 'readwrite');
-    transaction.objectStore(storeName).delete(id);
-    transaction.oncomplete = () => resolve();
-  });
+
+
+
+function addData(store,data){
+
+
+return new Promise((resolve,reject)=>{
+
+
+const transaction =
+db.transaction(store,"readwrite");
+
+
+transaction
+.objectStore(store)
+.add(data);
+
+
+transaction.oncomplete=resolve;
+
+
+transaction.onerror=reject;
+
+
+});
+
+
+}
+
+
+
+
+
+function getData(store){
+
+
+return new Promise((resolve,reject)=>{
+
+
+const transaction =
+db.transaction(store,"readonly");
+
+
+const request =
+transaction.objectStore(store).getAll();
+
+
+
+request.onsuccess=()=>resolve(request.result);
+
+
+request.onerror=reject;
+
+
+});
+
+
+}
+
+
+
+
+
+function deleteData(store,id){
+
+
+return new Promise((resolve,reject)=>{
+
+
+const transaction =
+db.transaction(store,"readwrite");
+
+
+transaction
+.objectStore(store)
+.delete(id);
+
+
+
+transaction.oncomplete=resolve;
+
+
+transaction.onerror=reject;
+
+
+
+});
+
+
 }
