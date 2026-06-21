@@ -24,13 +24,15 @@ function showPage(page){
     p.classList.add("hidden");
   });
 
-  let target=document.getElementById(page);
+  let target = document.getElementById(page);
 
   if(target){
     target.classList.remove("hidden");
   }
 
 }
+
+
 
 
 
@@ -73,7 +75,7 @@ list.innerHTML="";
 
 items.forEach(function(i){
 
-list.innerHTML += `
+list.innerHTML+=`
 
 <div class="item">
 
@@ -100,7 +102,6 @@ Supprimer
 
 
 // ===== RDV =====
-
 
 function addRdv(){
 
@@ -162,9 +163,7 @@ Supprimer
 
 
 
-
 // ===== SUIVI =====
-
 
 function addSuivi(){
 
@@ -185,7 +184,6 @@ date:new Date().toLocaleDateString()
 .then(loadSuivi);
 
 }
-
 
 
 
@@ -224,7 +222,6 @@ list.innerHTML+=`
 
 
 // ===== URGENCE =====
-
 
 function addContact(){
 
@@ -285,7 +282,7 @@ list.innerHTML+=`
 
 
 
-// ===== ORDONNANCES AVEC IMAGE =====
+// ===== ORDONNANCES IMAGE =====
 
 
 function addOrdonnance(){
@@ -308,7 +305,6 @@ return;
 
 
 
-
 function enregistrer(image){
 
 
@@ -319,7 +315,6 @@ date:date,
 image:image || ""
 
 })
-
 .then(function(){
 
 document.getElementById("ordonnanceNom").value="";
@@ -335,20 +330,17 @@ loadOrdonnances();
 
 
 
+
 if(file){
 
 
-let type=file.type;
-
-
 if(
-type !== "image/jpeg" &&
-type !== "image/png" &&
-type !== "image/webp"
+file.type!=="image/jpeg" &&
+file.type!=="image/png" &&
+file.type!=="image/webp"
 ){
 
-alert("Format accepté : JPG PNG WEBP");
-
+alert("Formats acceptés : JPG PNG WEBP");
 return;
 
 }
@@ -365,9 +357,7 @@ enregistrer(e.target.result);
 };
 
 
-
 reader.readAsDataURL(file);
-
 
 
 }else{
@@ -379,6 +369,7 @@ enregistrer("");
 
 
 }
+
 
 
 
@@ -400,7 +391,7 @@ list.innerHTML="";
 items.forEach(function(i){
 
 
-list.innerHTML += `
+list.innerHTML+=`
 
 <div class="item">
 
@@ -414,11 +405,18 @@ ${i.date || ""}
 
 
 
-${i.image ? 
-`
+${i.image ? `
+
+<img src="${i.image}"
+style="width:120px;border-radius:10px;margin-top:10px;">
+
+
+<br>
+
 <a href="${i.image}" target="_blank">
-📷 Voir ordonnance
+📷 Ouvrir
 </a>
+
 `
 : ""}
 
@@ -439,4 +437,4 @@ Supprimer
 });
 
 
-  }
+}
