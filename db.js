@@ -1,24 +1,26 @@
 let db;
 
 
-function initDB() {
+function initDB(){
 
 return new Promise((resolve,reject)=>{
 
 
-const request = indexedDB.open("TempZenDB",1);
+const request =
+indexedDB.open("TempZenDB",1);
 
 
 
-request.onupgradeneeded = function(e){
+request.onupgradeneeded = function(event){
 
-db = e.target.result;
+
+db = event.target.result;
+
 
 
 if(!db.objectStoreNames.contains("medicaments")){
 
-db.createObjectStore("medicaments",
-{
+db.createObjectStore("medicaments",{
 keyPath:"id",
 autoIncrement:true
 });
@@ -29,8 +31,7 @@ autoIncrement:true
 
 if(!db.objectStoreNames.contains("rdv")){
 
-db.createObjectStore("rdv",
-{
+db.createObjectStore("rdv",{
 keyPath:"id",
 autoIncrement:true
 });
@@ -41,8 +42,7 @@ autoIncrement:true
 
 if(!db.objectStoreNames.contains("suivi")){
 
-db.createObjectStore("suivi",
-{
+db.createObjectStore("suivi",{
 keyPath:"id",
 autoIncrement:true
 });
@@ -54,18 +54,23 @@ autoIncrement:true
 
 
 
-request.onsuccess=function(e){
 
-db=e.target.result;
+request.onsuccess=function(event){
+
+db = event.target.result;
+
 resolve();
 
 };
 
 
 
-request.onerror=function(e){
 
-reject(e);
+request.onerror=function(event){
+
+console.log("Erreur DB", event);
+
+reject(event);
 
 };
 
@@ -75,6 +80,8 @@ reject(e);
 
 
 }
+
+
 
 
 
@@ -85,25 +92,32 @@ function addData(store,data){
 return new Promise((resolve,reject)=>{
 
 
-const transaction =
+let transaction =
 db.transaction(store,"readwrite");
 
 
-transaction
-.objectStore(store)
-.add(data);
+let object =
+transaction.objectStore(store);
 
 
-transaction.oncomplete=resolve;
+
+object.add(data);
 
 
-transaction.onerror=reject;
+
+transaction.oncomplete=()=>resolve();
+
+
+transaction.onerror=e=>reject(e);
+
 
 
 });
 
 
 }
+
+
 
 
 
@@ -115,19 +129,25 @@ function getData(store){
 return new Promise((resolve,reject)=>{
 
 
-const transaction =
+let transaction =
 db.transaction(store,"readonly");
 
 
-const request =
+let request =
 transaction.objectStore(store).getAll();
 
 
 
-request.onsuccess=()=>resolve(request.result);
+request.onsuccess=()=>{
+
+resolve(request.result);
+
+};
 
 
-request.onerror=reject;
+
+request.onerror=e=>reject(e);
+
 
 
 });
@@ -139,13 +159,14 @@ request.onerror=reject;
 
 
 
+
 function deleteData(store,id){
 
 
 return new Promise((resolve,reject)=>{
 
 
-const transaction =
+let transaction =
 db.transaction(store,"readwrite");
 
 
@@ -155,10 +176,10 @@ transaction
 
 
 
-transaction.oncomplete=resolve;
+transaction.oncomplete=()=>resolve();
 
 
-transaction.onerror=reject;
+transaction.onerror=e=>reject(e);
 
 
 
