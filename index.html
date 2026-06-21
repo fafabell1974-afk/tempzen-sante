@@ -63,6 +63,11 @@
 </button>
 
 
+<button onclick="showPage('ordonnances')">
+📄 Ordonnances
+</button>
+
+
 <button onclick="showPage('urgence')">
 🚨 Urgence
 </button>
@@ -97,27 +102,20 @@ Votre espace santé personnel.
 <h2>💊 Médicaments</h2>
 
 
-
 <input id="medNom"
 placeholder="Nom du médicament">
-
 
 
 <input id="medDose"
 placeholder="Dosage (ex: 100 mg matin midi soir)">
 
 
-
 <button onclick="addMed()">
-
 Ajouter
-
 </button>
 
 
-
 <div id="medList"></div>
-
 
 
 </section>
@@ -134,7 +132,6 @@ Ajouter
 <h2>📅 Rendez-vous</h2>
 
 
-
 <input id="rdvNom"
 placeholder="Nom du rendez-vous">
 
@@ -148,9 +145,7 @@ type="time">
 
 
 <button onclick="addRdv()">
-
 Ajouter
-
 </button>
 
 
@@ -172,7 +167,6 @@ Ajouter
 <h2>❤️ Suivi santé</h2>
 
 
-
 <input id="suiviTexte"
 placeholder="Ex : Tension, Poids, Glycémie...">
 
@@ -181,20 +175,51 @@ placeholder="Ex : Tension, Poids, Glycémie...">
 placeholder="Valeur (ex : 13/8)">
 
 
-
 <button onclick="addSuivi()">
-
 Ajouter
-
 </button>
-
 
 
 <div id="suiviList"></div>
 
 
+</section>
+
+
+
+
+
+
+
+<section id="ordonnances" class="page hidden">
+
+
+<h2>📄 Ordonnances</h2>
+
+
+<input id="ordonnanceNom"
+placeholder="Nom de l'ordonnance">
+
+
+<input id="ordonnanceDate"
+type="date">
+
+
+<input id="ordonnanceImage"
+type="file"
+accept="image/*">
+
+
+<button onclick="addOrdonnance()">
+Ajouter
+</button>
+
+
+<div id="ordonnanceList"></div>
+
 
 </section>
+
 
 
 
@@ -227,9 +252,7 @@ placeholder="Numéro de téléphone">
 
 
 <button onclick="addContact()">
-
 Ajouter
-
 </button>
 
 
@@ -243,10 +266,10 @@ Ajouter
 
 
 
+
 <script src="./db.js"></script>
 
 <script src="./app.js"></script>
-
 
 
 
