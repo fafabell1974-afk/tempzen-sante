@@ -67,7 +67,7 @@ function loadMeds(){
 
       div.querySelector(".check").addEventListener("change", function(e){
         item.fait = e.target.checked;
-        addData("medicaments", item);
+        updateData("medicaments", item);
       });
 
       list.appendChild(div);
@@ -170,3 +170,4 @@ function loadSuivi(){
     });
   });
 }
+  
