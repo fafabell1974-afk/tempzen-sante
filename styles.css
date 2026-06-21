@@ -184,3 +184,70 @@ font-size:16px;
 color:#555;
 
 }
+
+
+h3 {
+
+font-size:20px;
+margin-top:25px;
+
+}
+
+
+.btn-urgence-15 {
+
+display:block;
+
+text-align:center;
+
+text-decoration:none;
+
+background:#dc2626;
+
+color:white;
+
+border-radius:15px;
+
+padding:22px;
+
+font-size:22px;
+
+font-weight:bold;
+
+margin:10px 0 25px 0;
+
+}
+
+
+.btn-urgence-15:hover {
+
+opacity:.9;
+
+}
+
+
+.btn-appel {
+
+background:#0f766e;
+
+color:white;
+
+text-decoration:none;
+
+border-radius:50%;
+
+width:44px;
+
+height:44px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:18px;
+
+flex-shrink:0;
+
+}
