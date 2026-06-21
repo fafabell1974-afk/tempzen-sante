@@ -3,7 +3,7 @@ let db;
 function initDB(){
   return new Promise((resolve,reject)=>{
 
-    const request = indexedDB.open("TempZenDB",1);
+    const request = indexedDB.open("TempZenDB",2);
 
     request.onupgradeneeded = function(event){
       db = event.target.result;
@@ -16,6 +16,9 @@ function initDB(){
       }
       if(!db.objectStoreNames.contains("suivi")){
         db.createObjectStore("suivi",{keyPath:"id",autoIncrement:true});
+      }
+      if(!db.objectStoreNames.contains("contacts")){
+        db.createObjectStore("contacts",{keyPath:"id",autoIncrement:true});
       }
     };
 
