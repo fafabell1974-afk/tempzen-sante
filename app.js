@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(){
+
   initDB()
     .then(function(){
       showPage("accueil");
@@ -6,218 +7,354 @@ document.addEventListener("DOMContentLoaded", function(){
       loadRdv();
       loadSuivi();
       loadContacts();
+      loadOrdonnances();
     })
     .catch(function(err){
       console.log("Erreur init DB", err);
-      alert("Erreur de démarrage : " + (err && err.message ? err.message : err));
+      alert("Erreur de démarrage : " + err);
     });
+
 });
 
+
+
 function showPage(page){
-  document.querySelectorAll(".page").forEach(function(p){
+
+  document.querySelectorAll(".page")
+  .forEach(function(p){
     p.classList.add("hidden");
   });
-  let target = document.getElementById(page);
+
+  let target=document.getElementById(page);
+
   if(target){
     target.classList.remove("hidden");
   }
+
 }
+
+
+
+
 
 // ===== MEDICAMENTS =====
 
 function addMed(){
-  let nom = document.getElementById("medNom").value.trim();
-  let dose = document.getElementById("medDose").value.trim();
 
-  if(!nom){
-    alert("Entrez un nom de médicament.");
-    return;
-  }
+let nom=document.getElementById("medNom").value.trim();
+let dose=document.getElementById("medDose").value.trim();
 
-  addData("medicaments", { nom: nom, dose: dose, fait: false })
-    .then(function(){
-      document.getElementById("medNom").value = "";
-      document.getElementById("medDose").value = "";
-      loadMeds();
-    })
-    .catch(function(err){
-      alert("Erreur ajout médicament : " + err.message);
-    });
+if(!nom)return;
+
+
+addData("medicaments",{
+nom:nom,
+dose:dose,
+fait:false
+})
+.then(()=>{
+document.getElementById("medNom").value="";
+document.getElementById("medDose").value="";
+loadMeds();
+});
+
 }
+
 
 function loadMeds(){
-  getData("medicaments").then(function(items){
-    let list = document.getElementById("medList");
-    list.innerHTML = "";
 
-    items.forEach(function(item){
-      let div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <input type="checkbox" class="check" ${item.fait ? "checked" : ""}>
-        <div>
-          <b>${item.nom}</b>
-          <div class="small">${item.dose}</div>
-        </div>
-        <button>Supprimer</button>
-      `;
+getData("medicaments").then(items=>{
 
-      div.querySelector("button").addEventListener("click", function(){
-        deleteData("medicaments", item.id).then(loadMeds);
-      });
+let list=document.getElementById("medList");
+list.innerHTML="";
 
-      div.querySelector(".check").addEventListener("change", function(e){
-        item.fait = e.target.checked;
-        updateData("medicaments", item);
-      });
 
-      list.appendChild(div);
-    });
-  });
+items.forEach(item=>{
+
+let div=document.createElement("div");
+
+div.className="item";
+
+div.innerHTML=`
+
+<b>${item.nom}</b>
+<div class="small">${item.dose}</div>
+<button>Supprimer</button>
+
+`;
+
+div.querySelector("button")
+.onclick=()=>{
+
+deleteData("medicaments",item.id)
+.then(loadMeds);
+
+};
+
+
+list.appendChild(div);
+
+
+});
+
+
+});
+
 }
 
-// ===== RENDEZ-VOUS =====
+
+
+
+// ===== RDV =====
 
 function addRdv(){
-  let nom = document.getElementById("rdvNom").value.trim();
-  let date = document.getElementById("rdvDate").value;
-  let heure = document.getElementById("rdvHeure").value;
 
-  if(!nom || !date){
-    alert("Entrez un nom et une date.");
-    return;
-  }
+let nom=document.getElementById("rdvNom").value;
+let date=document.getElementById("rdvDate").value;
+let heure=document.getElementById("rdvHeure").value;
 
-  addData("rdv", { nom: nom, date: date, heure: heure })
-    .then(function(){
-      document.getElementById("rdvNom").value = "";
-      document.getElementById("rdvDate").value = "";
-      document.getElementById("rdvHeure").value = "";
-      loadRdv();
-    })
-    .catch(function(err){
-      alert("Erreur ajout rendez-vous : " + err.message);
-    });
+
+if(!nom)return;
+
+
+addData("rdv",{
+nom,
+date,
+heure
+})
+.then(()=>{
+
+loadRdv();
+
+});
+
+
 }
+
+
 
 function loadRdv(){
-  getData("rdv").then(function(items){
-    let list = document.getElementById("rdvList");
-    list.innerHTML = "";
 
-    items.forEach(function(item){
-      let div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div>
-          <b>${item.nom}</b>
-          <div class="small">${item.date} ${item.heure || ""}</div>
-        </div>
-        <button>Supprimer</button>
-      `;
+getData("rdv").then(items=>{
 
-      div.querySelector("button").addEventListener("click", function(){
-        deleteData("rdv", item.id).then(loadRdv);
-      });
+let list=document.getElementById("rdvList");
 
-      list.appendChild(div);
-    });
-  });
+list.innerHTML="";
+
+
+items.forEach(item=>{
+
+list.innerHTML += `
+
+<div class="item">
+
+<b>${item.nom}</b>
+
+<div class="small">
+${item.date} ${item.heure||""}
+</div>
+
+<button onclick="deleteData('rdv',${item.id}).then(loadRdv)">
+Supprimer
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
 }
 
-// ===== SUIVI SANTE =====
+
+
+
+// ===== SUIVI =====
+
 
 function addSuivi(){
-  let texte = document.getElementById("suiviTexte").value.trim();
-  let valeur = document.getElementById("suiviValeur").value.trim();
 
-  if(!texte || !valeur){
-    alert("Entrez le type de mesure et la valeur.");
-    return;
-  }
+let texte=document.getElementById("suiviTexte").value;
+let valeur=document.getElementById("suiviValeur").value;
 
-  let date = new Date().toLocaleDateString("fr-FR");
 
-  addData("suivi", { texte: texte, valeur: valeur, date: date })
-    .then(function(){
-      document.getElementById("suiviTexte").value = "";
-      document.getElementById("suiviValeur").value = "";
-      loadSuivi();
-    })
-    .catch(function(err){
-      alert("Erreur ajout suivi : " + err.message);
-    });
+if(!texte)return;
+
+
+addData("suivi",{
+texte,
+valeur,
+date:new Date().toLocaleDateString()
+})
+.then(loadSuivi);
+
+
 }
+
 
 function loadSuivi(){
-  getData("suivi").then(function(items){
-    let list = document.getElementById("suiviList");
-    list.innerHTML = "";
 
-    items.forEach(function(item){
-      let div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div>
-          <b>${item.texte} : ${item.valeur}</b>
-          <div class="small">${item.date}</div>
-        </div>
-        <button>Supprimer</button>
-      `;
+getData("suivi").then(items=>{
 
-      div.querySelector("button").addEventListener("click", function(){
-        deleteData("suivi", item.id).then(loadSuivi);
-      });
+let list=document.getElementById("suiviList");
 
-      list.appendChild(div);
-    });
-  });
+list.innerHTML="";
+
+
+items.forEach(i=>{
+
+list.innerHTML+=`
+
+<div class="item">
+
+<b>${i.texte} : ${i.valeur}</b>
+
+<div class="small">${i.date}</div>
+
+</div>
+
+`;
+
+});
+
+});
+
 }
+
+
+
 
 // ===== CONTACTS URGENCE =====
 
+
 function addContact(){
-  let nom = document.getElementById("contactNom").value.trim();
-  let tel = document.getElementById("contactTel").value.trim();
 
-  if(!nom || !tel){
-    alert("Entrez un nom et un numéro de téléphone.");
-    return;
-  }
+let nom=document.getElementById("contactNom").value;
+let tel=document.getElementById("contactTel").value;
 
-  addData("contacts", { nom: nom, tel: tel })
-    .then(function(){
-      document.getElementById("contactNom").value = "";
-      document.getElementById("contactTel").value = "";
-      loadContacts();
-    })
-    .catch(function(err){
-      alert("Erreur ajout contact : " + err.message);
-    });
+
+if(!nom)return;
+
+
+addData("contacts",{
+nom,
+tel
+})
+.then(loadContacts);
+
+
 }
 
+
 function loadContacts(){
-  getData("contacts").then(function(items){
-    let list = document.getElementById("contactList");
-    list.innerHTML = "";
 
-    items.forEach(function(item){
-      let div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div>
-          <b>${item.nom}</b>
-          <div class="small">${item.tel}</div>
-        </div>
-        <a href="tel:${item.tel}" class="btn-appel">📞</a>
-        <button>Supprimer</button>
-      `;
+getData("contacts").then(items=>{
 
-      div.querySelector("button").addEventListener("click", function(){
-        deleteData("contacts", item.id).then(loadContacts);
-      });
+let list=document.getElementById("contactList");
 
-      list.appendChild(div);
-    });
-  });
+list.innerHTML="";
+
+
+items.forEach(i=>{
+
+list.innerHTML+=`
+
+<div class="item">
+
+<b>${i.nom}</b>
+
+<div>${i.tel}</div>
+
+<a href="tel:${i.tel}">
+📞
+</a>
+
+</div>
+
+`;
+
+});
+
+
+});
+
+}
+
+
+
+
+
+// ===== ORDONNANCES =====
+
+
+function addOrdonnance(){
+
+let nom=document.getElementById("ordonnanceNom").value;
+let date=document.getElementById("ordonnanceDate").value;
+
+
+if(!nom)return;
+
+
+addData("ordonnances",{
+
+nom,
+date
+
+})
+.then(()=>{
+
+document.getElementById("ordonnanceNom").value="";
+
+loadOrdonnances();
+
+});
+
+
+}
+
+
+
+function loadOrdonnances(){
+
+getData("ordonnances").then(items=>{
+
+
+let list=document.getElementById("ordonnanceList");
+
+list.innerHTML="";
+
+
+items.forEach(item=>{
+
+
+list.innerHTML+=`
+
+<div class="item">
+
+<b>${item.nom}</b>
+
+<div class="small">
+${item.date||""}
+</div>
+
+
+<button onclick="deleteData('ordonnances',${item.id}).then(loadOrdonnances)">
+Supprimer
+</button>
+
+
+</div>
+
+`;
+
+
+});
+
+
+});
+
+
   }
