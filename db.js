@@ -3,7 +3,7 @@ let db;
 function initDB(){
   return new Promise((resolve,reject)=>{
 
-    const request = indexedDB.open("TempZenDB",2);
+    const request = indexedDB.open("TempZenDB",6);
 
     request.onupgradeneeded = function(event){
       db = event.target.result;
