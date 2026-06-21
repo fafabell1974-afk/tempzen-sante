@@ -1,6 +1,8 @@
 {
+  "id": "/tempzen-sante/",
   "name": "TempZen Santé",
   "short_name": "TempZen",
+  "description": "Application de suivi santé pour seniors : médicaments, rendez-vous, mesures et contacts d'urgence.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f5f7fa",
