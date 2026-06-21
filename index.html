@@ -1,91 +1,174 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#0f766e">
 
 <link rel="manifest" href="./manifest.json">
+
 <link rel="stylesheet" href="./styles.css">
 
 <title>TempZen Santé</title>
+
 </head>
+
 
 <body>
 
-<div class="app">
 
-<header>
-<img src="./icon-192.png" width="80">
+<header class="header">
+
+<img src="./icon-192.png" class="logo">
+
+<div>
 <h1>TempZen Santé</h1>
+<p>Votre assistant santé simple</p>
+</div>
+
 </header>
 
 
-<nav id="navDropdown">
-<button onclick="setView('accueil')">Accueil</button>
-<button onclick="setView('rdv')">Rendez-vous</button>
-<button onclick="setView('medicaments')">Médicaments</button>
-<button onclick="setView('suivi')">Suivi santé</button>
+
+<nav>
+
+<button onclick="showPage('accueil')">
+🏠 Accueil
+</button>
+
+<button onclick="showPage('medicaments')">
+💊 Médicaments
+</button>
+
+
+<button onclick="showPage('rdv')">
+📅 Rendez-vous
+</button>
+
+
+<button onclick="showPage('suivi')">
+❤️ Suivi santé
+</button>
+
+
 </nav>
 
 
-<section id="accueil">
+
+<main>
+
+
+
+<section id="accueil" class="page">
+
 <h2>Bienvenue</h2>
-</section>
 
-
-<section id="section-rdv" class="hidden">
-
-<h2>📅 Rendez-vous</h2>
-
-<input id="rdvTitle" placeholder="Nom du rendez-vous">
-<input id="rdvDate" type="date">
-<input id="rdvNote" placeholder="Note">
-
-<button onclick="saveRdv()">Ajouter</button>
-
-<div id="rdvList"></div>
+<p>
+Gérez vos médicaments, rendez-vous et suivi santé.
+</p>
 
 </section>
 
 
 
-<section id="section-medicaments" class="hidden">
 
-<h2>💊 Médicaments</h2>
+<section id="medicaments" class="page hidden">
 
-<input id="medName" placeholder="Nom du médicament">
+<h2>💊 Mes médicaments</h2>
 
-<input id="medDose" placeholder="Dosage / matin midi soir">
 
-<button onclick="saveMed()">Ajouter</button>
+<input id="medNom"
+placeholder="Nom du médicament">
+
+
+<input id="medDose"
+placeholder="Dosage / matin midi soir">
+
+
+<button onclick="addMed()">
+➕ Ajouter
+</button>
+
 
 <div id="medList"></div>
 
+
 </section>
 
 
 
-<section id="section-suivi" class="hidden">
+
+
+<section id="rdv" class="page hidden">
+
+
+<h2>📅 Mes rendez-vous</h2>
+
+
+<input id="rdvNom"
+placeholder="Nom du rendez-vous">
+
+
+<input id="rdvDate"
+type="date">
+
+
+<input id="rdvHeure"
+type="time">
+
+
+<button onclick="addRdv()">
+➕ Ajouter
+</button>
+
+
+<div id="rdvList"></div>
+
+
+</section>
+
+
+
+
+
+<section id="suivi" class="page hidden">
+
 
 <h2>❤️ Suivi santé</h2>
 
-<input id="suiviType" placeholder="Type">
 
-<input id="suiviValue" placeholder="Valeur">
+<input id="suiviTexte"
+placeholder="Ex : tension 13/8">
 
-<button onclick="saveSuivi()">Ajouter</button>
+
+<button onclick="addSuivi()">
+➕ Ajouter
+</button>
+
 
 <div id="suiviList"></div>
+
 
 </section>
 
 
-</div>
+
+</main>
+
+
 
 
 <script src="./db.js"></script>
+
 <script src="./app.js"></script>
 
 
+
 </body>
+
 </html>
