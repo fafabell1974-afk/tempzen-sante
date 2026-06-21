@@ -1,118 +1,366 @@
-// app.js
+let currentPage = "accueil";
 
-// --- Navigation ---
-function toggleMenu() {
-  document.getElementById('navDropdown').classList.toggle('open');
-}
 
-function setView(view) {
-  const sections = {
-    accueil: document.getElementById('accueil'),
-    rdv: document.getElementById('section-rdv'),
-    medicaments: document.getElementById('section-medicaments'),
-    suivi: document.getElementById('section-suivi'),
-    urgence: document.getElementById('section-urgence')
-  };
+document.addEventListener("DOMContentLoaded", async()=>{
 
-  Object.values(sections).forEach(el => {
-    if (el) el.classList.add('hidden');
-  });
 
-  if (sections[view]) sections[view].classList.remove('hidden');
+await initDB();
 
-  document.getElementById('navDropdown').classList.remove('open');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
-// --- Formatage ---
-function fmtDate(value) {
-  if (!value) return '';
-  const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString('fr-FR');
-}
+showPage("accueil");
 
-// --- Rafraîchissement des listes ---
-async function refreshAll() {
-  const rdv = await getAll('rdv');
-  const meds = await getAll('medicaments');
-  const suivi = await getAll('suivi');
 
-  // Mise à jour RDV
-  document.getElementById('rdvList').innerHTML = rdv.length 
-    ? rdv.map(i => `
-      <div class="item">
-        <h4>${i.title || 'Rendez-vous'}</h4>
-        <p>${i.date ? fmtDate(i.date) : ''}</p>
-        <button class="btn btn-danger" onclick="removeItem('rdv', ${i.id})">Supprimer</button>
-      </div>`).join('') 
-    : '<p>Aucun rendez-vous.</p>';
+refreshLists();
 
-  // Mise à jour Médicaments
-  document.getElementById('medList').innerHTML = meds.length 
-    ? meds.map(i => `
-      <div class="item">
-        <h4>${i.name || 'Médicament'}</h4>
-        <p>${i.dose || ''}</p>
-        <button class="btn btn-danger" onclick="removeItem('medicaments', ${i.id})">Supprimer</button>
-      </div>`).join('') 
-    : '<p>Aucun médicament.</p>';
 
-  // Mise à jour Suivi
-  document.getElementById('suiviList').innerHTML = suivi.length 
-    ? suivi.map(i => `
-      <div class="item">
-        <h4>${i.type || 'Suivi'} : ${i.value || ''}</h4>
-        <p>${i.date ? fmtDate(i.date) : ''}</p>
-        <button class="btn btn-danger" onclick="removeItem('suivi', ${i.id})">Supprimer</button>
-      </div>`).join('') 
-    : '<p>Aucune mesure.</p>';
-}
-
-// --- Sauvegarde ---
-async function saveRdv() {
-  const title = document.getElementById('rdvTitle').value.trim();
-  const date = document.getElementById('rdvDate').value;
-  const note = document.getElementById('rdvNote').value.trim();
-  if (!title) return;
-  await addData('rdv', { title, date, note });
-  document.getElementById('rdvTitle').value = '';
-  document.getElementById('rdvDate').value = '';
-  document.getElementById('rdvNote').value = '';
-  await refreshAll();
-}
-
-async function saveMed() {
-  const name = document.getElementById('medName').value.trim();
-  const dose = document.getElementById('medDose').value.trim();
-  if (!name) return;
-  await addData('medicaments', { name, dose });
-  document.getElementById('medName').value = '';
-  document.getElementById('medDose').value = '';
-  await refreshAll();
-}
-
-async function saveSuivi() {
-  const type = document.getElementById('suiviType').value;
-  const value = document.getElementById('suiviValue').value.trim();
-  if (!value) return;
-  await addData('suivi', { type, value, date: new Date().toISOString() });
-  document.getElementById('suiviValue').value = '';
-  await refreshAll();
-}
-
-// --- Suppression ---
-async function removeItem(store, id) {
-  await deleteData(store, id);
-  await refreshAll();
-}
-
-// --- Initialisation ---
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await initDB();
-    await refreshAll();
-    setView('accueil');
-  } catch (e) {
-    console.error("Erreur d'initialisation :", e);
-  }
 });
+
+
+
+
+// Navigation
+
+function showPage(page){
+
+
+document
+.querySelectorAll(".page")
+.forEach(p=>p.classList.add("hidden"));
+
+
+
+document
+.getElementById(page)
+.classList.remove("hidden");
+
+
+currentPage=page;
+
+
+}
+
+
+
+
+
+// Médicaments
+
+
+async function addMed(){
+
+
+let nom =
+document.getElementById("medNom").value;
+
+
+let dose =
+document.getElementById("medDose").value;
+
+
+
+if(!nom) return;
+
+
+
+await addData("medicaments",{
+
+name:nom,
+
+dose:dose,
+
+done:false,
+
+date:new Date().toLocaleDateString()
+
+});
+
+
+
+document.getElementById("medNom").value="";
+
+document.getElementById("medDose").value="";
+
+
+refreshLists();
+
+}
+
+
+
+
+
+// Rendez-vous
+
+
+async function addRdv(){
+
+
+let nom =
+document.getElementById("rdvNom").value;
+
+
+let date =
+document.getElementById("rdvDate").value;
+
+
+let heure =
+document.getElementById("rdvHeure").value;
+
+
+
+if(!nom)return;
+
+
+
+await addData("rdv",{
+
+name:nom,
+
+date:date,
+
+heure:heure,
+
+done:false
+
+});
+
+
+
+refreshLists();
+
+
+}
+
+
+
+
+
+// Suivi santé
+
+
+async function addSuivi(){
+
+
+let texte =
+document.getElementById("suiviTexte").value;
+
+
+
+if(!texte)return;
+
+
+
+await addData("suivi",{
+
+text:texte,
+
+date:new Date().toLocaleDateString(),
+
+done:false
+
+});
+
+
+
+document.getElementById("suiviTexte").value="";
+
+
+refreshLists();
+
+
+}
+
+
+
+
+
+
+async function refreshLists(){
+
+
+
+let meds =
+await getData("medicaments");
+
+
+
+let rdvs =
+await getData("rdv");
+
+
+
+let suivis =
+await getData("suivi");
+
+
+
+
+
+document.getElementById("medList").innerHTML =
+
+meds.map(m=>`
+
+<div class="item">
+
+<input class="check"
+type="checkbox"
+${m.done?"checked":""}
+onclick="toggleItem('medicaments',${m.id})">
+
+
+<div>
+
+<b>${m.name}</b>
+
+<div class="small">
+${m.dose}
+</div>
+
+</div>
+
+
+<button onclick="removeItem('medicaments',${m.id})">
+Supprimer
+</button>
+
+
+</div>
+
+`).join("");
+
+
+
+
+
+
+
+document.getElementById("rdvList").innerHTML =
+
+rdvs.map(r=>`
+
+<div class="item">
+
+<input class="check"
+type="checkbox"
+${r.done?"checked":""}
+onclick="toggleItem('rdv',${r.id})">
+
+
+<div>
+
+<b>${r.name}</b>
+
+<div class="small">
+${r.date} ${r.heure}
+</div>
+
+</div>
+
+
+<button onclick="removeItem('rdv',${r.id})">
+Supprimer
+</button>
+
+
+</div>
+
+`).join("");
+
+
+
+
+
+
+
+document.getElementById("suiviList").innerHTML =
+
+suivis.map(s=>`
+
+<div class="item">
+
+
+<input class="check"
+type="checkbox"
+${s.done?"checked":""}
+onclick="toggleItem('suivi',${s.id})">
+
+
+
+<div>
+
+<b>${s.text}</b>
+
+<div class="small">
+${s.date}
+</div>
+
+
+</div>
+
+
+<button onclick="removeItem('suivi',${s.id})">
+Supprimer
+</button>
+
+
+</div>
+
+
+`).join("");
+
+
+
+}
+
+
+
+
+
+async function removeItem(store,id){
+
+
+await deleteData(store,id);
+
+
+refreshLists();
+
+
+}
+
+
+
+
+
+
+async function toggleItem(store,id){
+
+
+let items =
+await getData(store);
+
+
+
+let item =
+items.find(x=>x.id===id);
+
+
+
+if(item){
+
+
+item.done=!item.done;
+
+
+let tx =
+db.transaction(store,"readwrite");
+
+
+tx.objectStore(store)
+.put(item);
+
+
+
+}
+
+
+}
