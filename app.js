@@ -1,90 +1,104 @@
-let currentPage = "accueil";
+let dbReady = false;
 
 
-document.addEventListener("DOMContentLoaded", async()=>{
+// Démarrage
 
+document.addEventListener("DOMContentLoaded", async () => {
 
-await initDB();
+    try {
 
+        await initDB();
 
-showPage("accueil");
+        dbReady = true;
 
+        showPage("accueil");
 
-refreshLists();
+        await refreshLists();
 
+        console.log("TempZen démarré");
+
+    } catch (e) {
+
+        console.error("Erreur TempZen :", e);
+
+        document.querySelector(".app").innerHTML = `
+        <h2>Erreur de démarrage</h2>
+        <p>${e}</p>
+        `;
+
+    }
 
 });
-
 
 
 
 // Navigation
 
-function showPage(page){
+function showPage(page) {
 
 
-document
-.querySelectorAll(".page")
-.forEach(p=>p.classList.add("hidden"));
+    document
+    .querySelectorAll(".page")
+    .forEach(section => {
+
+        section.classList.add("hidden");
+
+    });
 
 
-
-document
-.getElementById(page)
-.classList.remove("hidden");
+    const target =
+    document.getElementById(page);
 
 
-currentPage=page;
+    if(target){
 
+        target.classList.remove("hidden");
+
+    }
 
 }
-
-
 
 
 
 // Médicaments
 
-
 async function addMed(){
 
 
-let nom =
-document.getElementById("medNom").value;
+    const nom =
+    document.getElementById("medNom").value.trim();
 
 
-let dose =
-document.getElementById("medDose").value;
-
-
-
-if(!nom) return;
+    const dose =
+    document.getElementById("medDose").value.trim();
 
 
 
-await addData("medicaments",{
-
-name:nom,
-
-dose:dose,
-
-done:false,
-
-date:new Date().toLocaleDateString()
-
-});
+    if(!nom) return;
 
 
 
-document.getElementById("medNom").value="";
+    await addData("medicaments",{
 
-document.getElementById("medDose").value="";
+        name: nom,
+
+        dose: dose,
+
+        done:false,
+
+        date:new Date().toLocaleDateString()
+
+    });
 
 
-refreshLists();
+
+    document.getElementById("medNom").value="";
+    document.getElementById("medDose").value="";
+
+
+    await refreshLists();
 
 }
-
 
 
 
@@ -95,42 +109,44 @@ refreshLists();
 async function addRdv(){
 
 
-let nom =
-document.getElementById("rdvNom").value;
+    const nom =
+    document.getElementById("rdvNom").value.trim();
 
 
-let date =
-document.getElementById("rdvDate").value;
+    const date =
+    document.getElementById("rdvDate").value;
 
 
-let heure =
-document.getElementById("rdvHeure").value;
-
-
-
-if(!nom)return;
+    const heure =
+    document.getElementById("rdvHeure").value;
 
 
 
-await addData("rdv",{
-
-name:nom,
-
-date:date,
-
-heure:heure,
-
-done:false
-
-});
+    if(!nom) return;
 
 
 
-refreshLists();
+    await addData("rdv",{
+
+        name:nom,
+
+        date,
+
+        heure,
+
+        done:false
+
+    });
+
+
+
+    document.getElementById("rdvNom").value="";
+
+
+    await refreshLists();
 
 
 }
-
 
 
 
@@ -141,32 +157,31 @@ refreshLists();
 async function addSuivi(){
 
 
-let texte =
-document.getElementById("suiviTexte").value;
+    const texte =
+    document.getElementById("suiviTexte").value.trim();
 
 
 
-if(!texte)return;
+    if(!texte) return;
 
 
 
-await addData("suivi",{
+    await addData("suivi",{
 
-text:texte,
+        text:texte,
 
-date:new Date().toLocaleDateString(),
+        date:new Date().toLocaleDateString(),
 
-done:false
+        done:false
 
-});
-
-
-
-document.getElementById("suiviTexte").value="";
+    });
 
 
-refreshLists();
 
+    document.getElementById("suiviTexte").value="";
+
+
+    await refreshLists();
 
 }
 
@@ -174,143 +189,137 @@ refreshLists();
 
 
 
+// Affichage listes
 
 async function refreshLists(){
 
 
+    if(!dbReady) return;
 
-let meds =
-await getData("medicaments");
 
 
+    const meds =
+    await getData("medicaments");
 
-let rdvs =
-await getData("rdv");
 
+    const rdvs =
+    await getData("rdv");
 
 
-let suivis =
-await getData("suivi");
+    const suivis =
+    await getData("suivi");
 
 
 
 
+    document.getElementById("medList").innerHTML =
 
-document.getElementById("medList").innerHTML =
+    meds.map(m=>`
 
-meds.map(m=>`
+    <div class="item">
 
-<div class="item">
+    <input class="check"
+    type="checkbox"
+    ${m.done ? "checked":""}
+    onclick="toggleItem('medicaments',${m.id})">
 
-<input class="check"
-type="checkbox"
-${m.done?"checked":""}
-onclick="toggleItem('medicaments',${m.id})">
 
+    <div>
+    <b>${m.name}</b>
+    <div class="small">${m.dose}</div>
+    </div>
 
-<div>
 
-<b>${m.name}</b>
+    <button onclick="removeItem('medicaments',${m.id})">
+    Supprimer
+    </button>
 
-<div class="small">
-${m.dose}
-</div>
 
-</div>
+    </div>
 
+    `).join("");
 
-<button onclick="removeItem('medicaments',${m.id})">
-Supprimer
-</button>
 
 
-</div>
 
-`).join("");
 
 
+    document.getElementById("rdvList").innerHTML =
 
+    rdvs.map(r=>`
 
+    <div class="item">
 
 
+    <input class="check"
+    type="checkbox"
+    ${r.done ? "checked":""}
+    onclick="toggleItem('rdv',${r.id})">
 
-document.getElementById("rdvList").innerHTML =
 
-rdvs.map(r=>`
+    <div>
 
-<div class="item">
+    <b>${r.name}</b>
 
-<input class="check"
-type="checkbox"
-${r.done?"checked":""}
-onclick="toggleItem('rdv',${r.id})">
+    <div class="small">
+    ${r.date} ${r.heure}
+    </div>
 
+    </div>
 
-<div>
 
-<b>${r.name}</b>
+    <button onclick="removeItem('rdv',${r.id})">
+    Supprimer
+    </button>
 
-<div class="small">
-${r.date} ${r.heure}
-</div>
 
-</div>
+    </div>
 
+    `).join("");
 
-<button onclick="removeItem('rdv',${r.id})">
-Supprimer
-</button>
 
 
-</div>
 
-`).join("");
 
 
 
+    document.getElementById("suiviList").innerHTML =
 
+    suivis.map(s=>`
 
+    <div class="item">
 
 
-document.getElementById("suiviList").innerHTML =
+    <input class="check"
+    type="checkbox"
+    ${s.done ? "checked":""}
+    onclick="toggleItem('suivi',${s.id})">
 
-suivis.map(s=>`
 
-<div class="item">
+    <div>
 
+    <b>${s.text}</b>
 
-<input class="check"
-type="checkbox"
-${s.done?"checked":""}
-onclick="toggleItem('suivi',${s.id})">
+    <div class="small">
+    ${s.date}
+    </div>
 
+    </div>
 
 
-<div>
+    <button onclick="removeItem('suivi',${s.id})">
+    Supprimer
+    </button>
 
-<b>${s.text}</b>
 
-<div class="small">
-${s.date}
-</div>
+    </div>
 
-
-</div>
-
-
-<button onclick="removeItem('suivi',${s.id})">
-Supprimer
-</button>
-
-
-</div>
-
-
-`).join("");
+    `).join("");
 
 
 
 }
+
 
 
 
@@ -318,15 +327,11 @@ Supprimer
 
 async function removeItem(store,id){
 
+    await deleteData(store,id);
 
-await deleteData(store,id);
-
-
-refreshLists();
-
+    await refreshLists();
 
 }
-
 
 
 
@@ -335,32 +340,30 @@ refreshLists();
 async function toggleItem(store,id){
 
 
-let items =
-await getData(store);
+    const items =
+    await getData(store);
 
 
 
-let item =
-items.find(x=>x.id===id);
+    const item =
+    items.find(x=>x.id===id);
 
 
 
-if(item){
+    if(item){
 
 
-item.done=!item.done;
-
-
-let tx =
-db.transaction(store,"readwrite");
-
-
-tx.objectStore(store)
-.put(item);
+        item.done =
+        !item.done;
 
 
 
-}
+        await addData(store,item);
+
+        await refreshLists();
+
+
+    }
 
 
 }
