@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function(){
       loadMeds();
       loadRdv();
       loadSuivi();
+      loadContacts();
     })
     .catch(function(err){
       console.log("Erreur init DB", err);
@@ -171,4 +172,52 @@ function loadSuivi(){
       list.appendChild(div);
     });
   });
-        }
+}
+
+// ===== CONTACTS URGENCE =====
+
+function addContact(){
+  let nom = document.getElementById("contactNom").value.trim();
+  let tel = document.getElementById("contactTel").value.trim();
+
+  if(!nom || !tel){
+    alert("Entrez un nom et un numéro de téléphone.");
+    return;
+  }
+
+  addData("contacts", { nom: nom, tel: tel })
+    .then(function(){
+      document.getElementById("contactNom").value = "";
+      document.getElementById("contactTel").value = "";
+      loadContacts();
+    })
+    .catch(function(err){
+      alert("Erreur ajout contact : " + err.message);
+    });
+}
+
+function loadContacts(){
+  getData("contacts").then(function(items){
+    let list = document.getElementById("contactList");
+    list.innerHTML = "";
+
+    items.forEach(function(item){
+      let div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <div>
+          <b>${item.nom}</b>
+          <div class="small">${item.tel}</div>
+        </div>
+        <a href="tel:${item.tel}" class="btn-appel">📞</a>
+        <button>Supprimer</button>
+      `;
+
+      div.querySelector("button").addEventListener("click", function(){
+        deleteData("contacts", item.id).then(loadContacts);
+      });
+
+      list.appendChild(div);
+    });
+  });
+  }
