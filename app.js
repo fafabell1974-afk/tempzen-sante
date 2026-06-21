@@ -15,16 +15,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         await refreshLists();
 
-        console.log("TempZen démarré");
+        console.log("TempZen OK");
+
 
     } catch (e) {
 
-        console.error("Erreur TempZen :", e);
+        console.error(e);
 
-        document.querySelector(".app").innerHTML = `
-        <h2>Erreur de démarrage</h2>
-        <p>${e}</p>
-        `;
+        document.querySelector(".app").innerHTML =
+        "<h2>Erreur de démarrage</h2><p>"+e+"</p>";
 
     }
 
@@ -32,27 +31,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
+
 // Navigation
 
-function showPage(page) {
+function showPage(page){
 
 
     document
     .querySelectorAll(".page")
-    .forEach(section => {
-
-        section.classList.add("hidden");
-
-    });
+    .forEach(p=>p.classList.add("hidden"));
 
 
-    const target =
+    let element =
     document.getElementById(page);
 
 
-    if(target){
+    if(element){
 
-        target.classList.remove("hidden");
+        element.classList.remove("hidden");
 
     }
 
@@ -60,29 +56,41 @@ function showPage(page) {
 
 
 
-// Médicaments
+
+
+
+// =================
+// MEDICAMENTS
+// =================
+
 
 async function addMed(){
 
 
-    const nom =
+    let nom =
     document.getElementById("medNom").value.trim();
 
 
-    const dose =
+    let dose =
     document.getElementById("medDose").value.trim();
 
 
 
-    if(!nom) return;
+    if(!nom){
+
+        alert("Nom du médicament obligatoire");
+
+        return;
+
+    }
 
 
 
     await addData("medicaments",{
 
-        name: nom,
+        name:nom,
 
-        dose: dose,
+        dose:dose,
 
         done:false,
 
@@ -93,36 +101,42 @@ async function addMed(){
 
 
     document.getElementById("medNom").value="";
+
     document.getElementById("medDose").value="";
 
 
     await refreshLists();
+
 
 }
 
 
 
 
-// Rendez-vous
+
+
+// =================
+// RDV
+// =================
 
 
 async function addRdv(){
 
 
-    const nom =
+    let nom =
     document.getElementById("rdvNom").value.trim();
 
 
-    const date =
+    let date =
     document.getElementById("rdvDate").value;
 
 
-    const heure =
+    let heure =
     document.getElementById("rdvHeure").value;
 
 
 
-    if(!nom) return;
+    if(!nom)return;
 
 
 
@@ -145,24 +159,27 @@ async function addRdv(){
 
     await refreshLists();
 
-
 }
 
 
 
 
-// Suivi santé
+
+
+// =================
+// SUIVI
+// =================
 
 
 async function addSuivi(){
 
 
-    const texte =
+    let texte =
     document.getElementById("suiviTexte").value.trim();
 
 
 
-    if(!texte) return;
+    if(!texte)return;
 
 
 
@@ -189,24 +206,29 @@ async function addSuivi(){
 
 
 
-// Affichage listes
+
+
+// =================
+// AFFICHAGE
+// =================
+
 
 async function refreshLists(){
 
 
-    if(!dbReady) return;
+    if(!dbReady)return;
 
 
 
-    const meds =
+    let meds =
     await getData("medicaments");
 
 
-    const rdvs =
+    let rdvs =
     await getData("rdv");
 
 
-    const suivis =
+    let suivis =
     await getData("suivi");
 
 
@@ -218,15 +240,20 @@ async function refreshLists(){
 
     <div class="item">
 
+
     <input class="check"
     type="checkbox"
-    ${m.done ? "checked":""}
-    onclick="toggleItem('medicaments',${m.id})">
+    ${m.done ? "checked":""}>
 
 
     <div>
+
     <b>${m.name}</b>
-    <div class="small">${m.dose}</div>
+
+    <div class="small">
+    ${m.dose}
+    </div>
+
     </div>
 
 
@@ -237,8 +264,8 @@ async function refreshLists(){
 
     </div>
 
-    `).join("");
 
+    `).join("");
 
 
 
@@ -252,9 +279,7 @@ async function refreshLists(){
 
 
     <input class="check"
-    type="checkbox"
-    ${r.done ? "checked":""}
-    onclick="toggleItem('rdv',${r.id})">
+    type="checkbox">
 
 
     <div>
@@ -264,6 +289,7 @@ async function refreshLists(){
     <div class="small">
     ${r.date} ${r.heure}
     </div>
+
 
     </div>
 
@@ -291,9 +317,7 @@ async function refreshLists(){
 
 
     <input class="check"
-    type="checkbox"
-    ${s.done ? "checked":""}
-    onclick="toggleItem('suivi',${s.id})">
+    type="checkbox">
 
 
     <div>
@@ -303,6 +327,7 @@ async function refreshLists(){
     <div class="small">
     ${s.date}
     </div>
+
 
     </div>
 
@@ -331,39 +356,4 @@ async function removeItem(store,id){
 
     await refreshLists();
 
-}
-
-
-
-
-
-async function toggleItem(store,id){
-
-
-    const items =
-    await getData(store);
-
-
-
-    const item =
-    items.find(x=>x.id===id);
-
-
-
-    if(item){
-
-
-        item.done =
-        !item.done;
-
-
-
-        await addData(store,item);
-
-        await refreshLists();
-
-
-    }
-
-
-}
+        }
