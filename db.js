@@ -54,6 +54,16 @@ function getData(store){
   });
 }
 
+function updateData(store,data){
+  return new Promise((resolve,reject)=>{
+    let transaction = db.transaction(store,"readwrite");
+    transaction.objectStore(store).put(data);
+
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = (e) => reject(e.target.error);
+  });
+}
+
 function deleteData(store,id){
   return new Promise((resolve,reject)=>{
     let transaction = db.transaction(store,"readwrite");
