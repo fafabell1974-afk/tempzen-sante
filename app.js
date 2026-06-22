@@ -297,7 +297,7 @@ let file=document.getElementById("ordonnanceImage").files[0];
 
 if(!nom){
 
-alert("Nom obligatoire");
+alert("TEST ORDONNANCE V2");
 
 return;
 
