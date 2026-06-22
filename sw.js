@@ -282,17 +282,17 @@ list.innerHTML+=`
 
 
 
-// ===== ORDONNANCES IMAGE CORRIGE =====
+// ===== ORDONNANCES =====
 
 
 function addOrdonnance(){
 
 
-let nom = document.getElementById("ordonnanceNom").value.trim();
+let nom=document.getElementById("ordonnanceNom").value.trim();
 
-let date = document.getElementById("ordonnanceDate").value;
+let date=document.getElementById("ordonnanceDate").value;
 
-let file = document.getElementById("ordonnanceImage").files[0];
+let file=document.getElementById("ordonnanceImage").files[0];
 
 
 
@@ -306,20 +306,10 @@ return;
 
 
 
-if(!file){
-
-saveOrdonnance(nom,date,"");
-
-return;
-
-}
+if(file){
 
 
-
-
-if(
-!file.name.match(/\.(jpg|jpeg|png|webp)$/i)
-){
+if(!file.name.match(/\.(jpg|jpeg|png|webp)$/i)){
 
 alert("Formats acceptés JPG PNG WEBP");
 
@@ -329,24 +319,13 @@ return;
 
 
 
-
-let reader = new FileReader();
+let reader=new FileReader();
 
 
 
 reader.onload=function(e){
 
-
-saveOrdonnance(
-
-nom,
-
-date,
-
-e.target.result
-
-);
-
+saveOrdonnance(nom,date,e.target.result);
 
 };
 
@@ -356,10 +335,16 @@ reader.readAsDataURL(file);
 
 
 
+}else{
+
+
+saveOrdonnance(nom,date,"");
+
+
 }
 
 
-
+}
 
 
 
@@ -378,7 +363,6 @@ image:image
 
 })
 
-
 .then(function(){
 
 
@@ -391,7 +375,6 @@ document.getElementById("ordonnanceImage").value="";
 
 
 loadOrdonnances();
-
 
 
 });
@@ -422,7 +405,6 @@ list.innerHTML="";
 items.forEach(function(i){
 
 
-
 list.innerHTML+=`
 
 <div class="item">
@@ -441,7 +423,6 @@ ${i.date || ""}
 
 ${i.image ? `
 
-
 <div class="ordonnance-preview">
 
 
@@ -452,7 +433,6 @@ src="${i.image}"
 class="miniatureOrdonnance"
 
 loading="lazy">
-
 
 
 <br>
@@ -472,7 +452,6 @@ loading="lazy">
 
 
 
-
 <button onclick="deleteData('ordonnances',${i.id}).then(loadOrdonnances)">
 
 Supprimer
@@ -484,8 +463,6 @@ Supprimer
 </div>
 
 `;
-
-
 
 });
 
