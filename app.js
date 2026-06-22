@@ -407,15 +407,20 @@ ${i.date || ""}
 
 ${i.image ? `
 
-<img src="${i.image}"
-style="width:120px;border-radius:10px;margin-top:10px;">
+<div class="ordonnance-preview">
 
+<img 
+src="${i.image}"
+class="miniatureOrdonnance"
+loading="lazy">
 
 <br>
 
 <a href="${i.image}" target="_blank">
 📷 Ouvrir
 </a>
+
+</div>
 
 `
 : ""}
