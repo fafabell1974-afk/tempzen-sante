@@ -5,7 +5,7 @@ function initDB(){
 return new Promise((resolve,reject)=>{
 
 
-const request = indexedDB.open("TempZenDB",7);
+const request = indexedDB.open("TempZenDB",8);
 
 
 
