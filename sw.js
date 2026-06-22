@@ -1,4 +1,4 @@
-const CACHE = "tempzen-v2";
+const CACHE = "tempzen-v3";
 
 const files = [
   "./",
