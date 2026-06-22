@@ -282,7 +282,7 @@ list.innerHTML+=`
 
 
 
-// ===== ORDONNANCES IMAGE =====
+// ===== ORDONNANCES IMAGE CORRIGE =====
 
 
 function addOrdonnance(){
@@ -295,9 +295,10 @@ let date=document.getElementById("ordonnanceDate").value;
 let file=document.getElementById("ordonnanceImage").files[0];
 
 
+
 if(!nom){
 
-alert("TEST ORDONNANCE V2");
+alert("Nom ordonnance obligatoire");
 
 return;
 
@@ -305,42 +306,13 @@ return;
 
 
 
-function enregistrer(image){
-
-
-addData("ordonnances",{
-
-nom:nom,
-date:date,
-image:image || ""
-
-})
-.then(function(){
-
-document.getElementById("ordonnanceNom").value="";
-document.getElementById("ordonnanceDate").value="";
-document.getElementById("ordonnanceImage").value="";
-
-loadOrdonnances();
-
-});
-
-
-}
-
-
-
-
 if(file){
 
 
-if(
-file.type!=="image/jpeg" &&
-file.type!=="image/png" &&
-file.type!=="image/webp"
-){
+if(!file.type.startsWith("image/")){
 
-alert("Formats acceptés : JPG PNG WEBP");
+alert("JPG PNG WEBP uniquement");
+
 return;
 
 }
@@ -350,22 +322,61 @@ return;
 let reader=new FileReader();
 
 
+
 reader.onload=function(e){
 
-enregistrer(e.target.result);
+saveOrdonnance(e.target.result);
 
 };
+
 
 
 reader.readAsDataURL(file);
 
 
+
 }else{
 
 
-enregistrer("");
+saveOrdonnance("");
 
 }
+
+
+}
+
+
+
+
+
+
+function saveOrdonnance(image){
+
+
+addData("ordonnances",{
+
+nom:document.getElementById("ordonnanceNom").value,
+
+date:document.getElementById("ordonnanceDate").value,
+
+image:image
+
+
+})
+.then(function(){
+
+
+document.getElementById("ordonnanceNom").value="";
+
+document.getElementById("ordonnanceDate").value="";
+
+document.getElementById("ordonnanceImage").value="";
+
+
+loadOrdonnances();
+
+
+});
 
 
 }
@@ -384,11 +395,13 @@ getData("ordonnances").then(function(items){
 
 let list=document.getElementById("ordonnanceList");
 
+
 list.innerHTML="";
 
 
 
 items.forEach(function(i){
+
 
 
 list.innerHTML+=`
@@ -409,26 +422,39 @@ ${i.image ? `
 
 <div class="ordonnance-preview">
 
+
 <img 
+
 src="${i.image}"
+
 class="miniatureOrdonnance"
+
 loading="lazy">
+
+
 
 <br>
 
+
 <a href="${i.image}" target="_blank">
+
 📷 Ouvrir
+
 </a>
+
 
 </div>
 
-`
-: ""}
+
+` : ""}
+
 
 
 
 <button onclick="deleteData('ordonnances',${i.id}).then(loadOrdonnances)">
+
 Supprimer
+
 </button>
 
 
