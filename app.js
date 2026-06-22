@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function(){
       loadOrdonnances();
     })
     .catch(function(err){
-      console.log("Erreur init DB", err);
       alert("Erreur de démarrage : " + err);
     });
 
@@ -25,7 +24,7 @@ function showPage(page){
     p.classList.add("hidden");
   });
 
-  let target=document.getElementById(page);
+  let target = document.getElementById(page);
 
   if(target){
     target.classList.remove("hidden");
@@ -52,55 +51,52 @@ nom:nom,
 dose:dose,
 fait:false
 })
-.then(()=>{
+.then(function(){
+
 document.getElementById("medNom").value="";
 document.getElementById("medDose").value="";
+
 loadMeds();
+
 });
 
 }
+
 
 
 function loadMeds(){
 
-getData("medicaments").then(items=>{
+getData("medicaments").then(function(items){
 
 let list=document.getElementById("medList");
+
 list.innerHTML="";
 
 
-items.forEach(item=>{
+items.forEach(function(i){
 
-let div=document.createElement("div");
+list.innerHTML+=`
 
-div.className="item";
+<div class="item">
 
-div.innerHTML=`
+<b>${i.nom}</b>
 
-<b>${item.nom}</b>
-<div class="small">${item.dose}</div>
-<button>Supprimer</button>
+<div class="small">${i.dose}</div>
+
+<button onclick="deleteData('medicaments',${i.id}).then(loadMeds)">
+Supprimer
+</button>
+
+</div>
 
 `;
 
-div.querySelector("button")
-.onclick=()=>{
-
-deleteData("medicaments",item.id)
-.then(loadMeds);
-
-};
-
-
-list.appendChild(div);
-
-
 });
-
 
 });
 
 }
+
 
 
 
@@ -118,16 +114,11 @@ if(!nom)return;
 
 
 addData("rdv",{
-nom,
-date,
-heure
+nom:nom,
+date:date,
+heure:heure
 })
-.then(()=>{
-
-loadRdv();
-
-});
-
+.then(loadRdv);
 
 }
 
@@ -135,26 +126,26 @@ loadRdv();
 
 function loadRdv(){
 
-getData("rdv").then(items=>{
+getData("rdv").then(function(items){
 
 let list=document.getElementById("rdvList");
 
 list.innerHTML="";
 
 
-items.forEach(item=>{
+items.forEach(function(i){
 
-list.innerHTML += `
+list.innerHTML+=`
 
 <div class="item">
 
-<b>${item.nom}</b>
+<b>${i.nom}</b>
 
 <div class="small">
-${item.date} ${item.heure||""}
+${i.date} ${i.heure || ""}
 </div>
 
-<button onclick="deleteData('rdv',${item.id}).then(loadRdv)">
+<button onclick="deleteData('rdv',${i.id}).then(loadRdv)">
 Supprimer
 </button>
 
@@ -171,8 +162,8 @@ Supprimer
 
 
 
-// ===== SUIVI =====
 
+// ===== SUIVI =====
 
 function addSuivi(){
 
@@ -184,26 +175,28 @@ if(!texte)return;
 
 
 addData("suivi",{
-texte,
-valeur,
+
+texte:texte,
+valeur:valeur,
 date:new Date().toLocaleDateString()
+
 })
 .then(loadSuivi);
-
 
 }
 
 
+
 function loadSuivi(){
 
-getData("suivi").then(items=>{
+getData("suivi").then(function(items){
 
 let list=document.getElementById("suiviList");
 
 list.innerHTML="";
 
 
-items.forEach(i=>{
+items.forEach(function(i){
 
 list.innerHTML+=`
 
@@ -226,8 +219,9 @@ list.innerHTML+=`
 
 
 
-// ===== CONTACTS URGENCE =====
 
+
+// ===== URGENCE =====
 
 function addContact(){
 
@@ -239,25 +233,27 @@ if(!nom)return;
 
 
 addData("contacts",{
-nom,
-tel
+
+nom:nom,
+tel:tel
+
 })
 .then(loadContacts);
-
 
 }
 
 
+
 function loadContacts(){
 
-getData("contacts").then(items=>{
+getData("contacts").then(function(items){
 
 let list=document.getElementById("contactList");
 
 list.innerHTML="";
 
 
-items.forEach(i=>{
+items.forEach(function(i){
 
 list.innerHTML+=`
 
@@ -277,7 +273,6 @@ list.innerHTML+=`
 
 });
 
-
 });
 
 }
@@ -286,63 +281,180 @@ list.innerHTML+=`
 
 
 
-// ===== ORDONNANCES =====
+
+// ===== ORDONNANCES IMAGE CORRIGE =====
 
 
 function addOrdonnance(){
 
-let nom=document.getElementById("ordonnanceNom").value;
+
+let nom=document.getElementById("ordonnanceNom").value.trim();
+
 let date=document.getElementById("ordonnanceDate").value;
 
+let file=document.getElementById("ordonnanceImage").files[0];
 
-if(!nom)return;
+
+
+if(!nom){
+
+alert("Nom ordonnance obligatoire");
+
+return;
+
+}
+
+
+
+if(file){
+
+
+if(!file.type.startsWith("image/")){
+
+alert("JPG PNG WEBP uniquement");
+
+return;
+
+}
+
+
+
+let reader=new FileReader();
+
+
+
+reader.onload=function(e){
+
+saveOrdonnance(e.target.result);
+
+};
+
+
+
+reader.readAsDataURL(file);
+
+
+
+}else{
+
+
+saveOrdonnance("");
+
+}
+
+
+}
+
+
+
+
+
+
+function saveOrdonnance(image){
 
 
 addData("ordonnances",{
 
-nom,
-date
+nom:document.getElementById("ordonnanceNom").value,
+
+date:document.getElementById("ordonnanceDate").value,
+
+image:image
+
 
 })
-.then(()=>{
+.then(function(){
+
 
 document.getElementById("ordonnanceNom").value="";
 
+document.getElementById("ordonnanceDate").value="";
+
+document.getElementById("ordonnanceImage").value="";
+
+
 loadOrdonnances();
+
 
 });
 
 
 }
+
+
+
+
 
 
 
 function loadOrdonnances(){
 
-getData("ordonnances").then(items=>{
+
+getData("ordonnances").then(function(items){
 
 
 let list=document.getElementById("ordonnanceList");
 
+
 list.innerHTML="";
 
 
-items.forEach(item=>{
+
+items.forEach(function(i){
+
 
 
 list.innerHTML+=`
 
 <div class="item">
 
-<b>${item.nom}</b>
+
+<b>${i.nom}</b>
+
 
 <div class="small">
-${item.date||""}
+${i.date || ""}
 </div>
 
 
-<button onclick="deleteData('ordonnances',${item.id}).then(loadOrdonnances)">
+
+${i.image ? `
+
+<div class="ordonnance-preview">
+
+
+<img 
+
+src="${i.image}"
+
+class="miniatureOrdonnance"
+
+loading="lazy">
+
+
+
+<br>
+
+
+<a href="${i.image}" target="_blank">
+
+📷 Ouvrir
+
+</a>
+
+
+</div>
+
+
+` : ""}
+
+
+
+
+<button onclick="deleteData('ordonnances',${i.id}).then(loadOrdonnances)">
+
 Supprimer
+
 </button>
 
 
@@ -350,11 +462,10 @@ Supprimer
 
 `;
 
-
 });
 
 
 });
 
 
-  }
+}
