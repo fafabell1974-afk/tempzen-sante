@@ -1,5 +1,6 @@
 let db;
 
+
 function initDB(){
 
 return new Promise((resolve,reject)=>{
@@ -9,48 +10,30 @@ const request = indexedDB.open("TempZenDB",8);
 
 
 
-request.onupgradeneeded = function(event){
+request.onupgradeneeded=function(event){
 
-
-db = event.target.result;
+db=event.target.result;
 
 
 
 if(!db.objectStoreNames.contains("medicaments")){
-db.createObjectStore("medicaments",{
-keyPath:"id",
-autoIncrement:true
-});
+db.createObjectStore("medicaments",{keyPath:"id",autoIncrement:true});
 }
-
 
 
 if(!db.objectStoreNames.contains("rdv")){
-db.createObjectStore("rdv",{
-keyPath:"id",
-autoIncrement:true
-});
+db.createObjectStore("rdv",{keyPath:"id",autoIncrement:true});
 }
-
 
 
 if(!db.objectStoreNames.contains("suivi")){
-db.createObjectStore("suivi",{
-keyPath:"id",
-autoIncrement:true
-});
+db.createObjectStore("suivi",{keyPath:"id",autoIncrement:true});
 }
-
 
 
 if(!db.objectStoreNames.contains("contacts")){
-db.createObjectStore("contacts",{
-keyPath:"id",
-autoIncrement:true
-});
+db.createObjectStore("contacts",{keyPath:"id",autoIncrement:true});
 }
-
-
 
 
 if(!db.objectStoreNames.contains("ordonnances")){
@@ -67,28 +50,20 @@ autoIncrement:true
 
 
 
-
-
 request.onsuccess=function(event){
 
 db=event.target.result;
-
 resolve();
 
 };
 
 
 
-
-
 request.onerror=function(event){
-
-console.log("Erreur DB",event.target.error);
 
 reject(event.target.error);
 
 };
-
 
 
 });
@@ -111,20 +86,29 @@ let transaction=db.transaction(store,"readwrite");
 let object=transaction.objectStore(store);
 
 
-object.add(data);
+let req=object.add(data);
 
 
 
-transaction.oncomplete=()=>resolve();
+req.onerror=function(e){
+
+reject(e.target.error);
+
+};
 
 
-transaction.onerror=(e)=>reject(e.target.error);
 
+transaction.oncomplete=function(){
+
+resolve();
+
+};
 
 
 });
 
 }
+
 
 
 
@@ -142,40 +126,18 @@ let transaction=db.transaction(store,"readonly");
 let request=transaction.objectStore(store).getAll();
 
 
+request.onsuccess=function(){
 
-request.onsuccess=()=>resolve(request.result);
+resolve(request.result);
 
-
-request.onerror=(e)=>reject(e.target.error);
-
-
-
-});
-
-}
+};
 
 
+request.onerror=function(e){
 
+reject(e.target.error);
 
-
-
-function updateData(store,data){
-
-return new Promise((resolve,reject)=>{
-
-
-let transaction=db.transaction(store,"readwrite");
-
-
-transaction.objectStore(store).put(data);
-
-
-
-transaction.oncomplete=()=>resolve();
-
-
-transaction.onerror=(e)=>reject(e.target.error);
-
+};
 
 
 });
@@ -203,8 +165,7 @@ transaction.objectStore(store).delete(id);
 transaction.oncomplete=()=>resolve();
 
 
-transaction.onerror=(e)=>reject(e.target.error);
-
+transaction.onerror=e=>reject(e.target.error);
 
 
 });
