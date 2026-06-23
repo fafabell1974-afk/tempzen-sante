@@ -1,290 +1,128 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<meta name="theme-color" content="#0f766e">
-
-<link rel="manifest" href="./manifest.json">
-
-<link rel="stylesheet" href="./styles.css">
-
-<title>TempZen Santé</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./styles.css">
+  <title>TempZen Santé</title>
 </head>
-
-
 <body>
-
-
 <div class="app">
 
+  <header class="header">
+    <img src="./icon-192.png" class="logo">
+    <div>
+      <h1>TempZen Santé</h1>
+      <p>Assistant santé simple</p>
+    </div>
+  </header>
 
-<header class="header">
+  <nav>
+    <button onclick="showPage('profil')">👤 Profil</button>
+    <button onclick="showPage('medical')">🩺 Médical</button>
+    <button onclick="showPage('medicaments')">💊 Médicaments</button>
+    <button onclick="showPage('rdv')">📅 Rendez-vous</button>
+    <button onclick="showPage('suivi')">❤️ Suivi santé</button>
+    <button onclick="showPage('ordonnances')">📄 Ordonnances</button>
+    <button onclick="showPage('urgence')">🚨 Urgence</button>
+  </nav>
 
-<img src="./icon-192.png" class="logo">
+  <!-- PROFIL -->
+  <section id="profil" class="page">
+    <h2>👤 Profil personnel</h2>
+    <div id="profilForm">
+      <input id="profilNom" placeholder="Nom">
+      <input id="profilPrenom" placeholder="Prénom">
+      <input id="profilDateNaissance" type="date" placeholder="Date de naissance">
+      <input id="profilAdresse" placeholder="Adresse">
+      <input id="profilTelephone" type="tel" placeholder="Téléphone">
+      <input id="profilEmail" type="email" placeholder="Email (optionnel)">
+      <input id="profilContactUrgenceNom" placeholder="Contact urgence — Nom">
+      <input id="profilContactUrgenceTel" type="tel" placeholder="Contact urgence — Téléphone">
+      <label class="file-label">📷 Photo de profil
+        <input id="profilPhoto" type="file" accept="image/*">
+      </label>
+      <button onclick="saveProfil()">💾 Enregistrer</button>
+    </div>
+    <div id="profilFiche" class="hidden"></div>
+  </section>
 
-<div>
+  <!-- MÉDICAL -->
+  <section id="medical" class="page hidden">
+    <h2>🩺 Informations médicales</h2>
+    <div id="medicalForm">
+      <input id="medicalGroupeSanguin" placeholder="Groupe sanguin (ex : A+)">
+      <textarea id="medicalAllergies" placeholder="Allergies connues"></textarea>
+      <textarea id="medicalAntecedents" placeholder="Antécédents médicaux"></textarea>
+      <textarea id="medicalMaladies" placeholder="Maladies connues"></textarea>
+      <textarea id="medicalOperations" placeholder="Opérations / hospitalisations"></textarea>
+      <input id="medicalMedecinTraitant" placeholder="Médecin traitant — Nom">
+      <input id="medicalMedecinTel" type="tel" placeholder="Médecin traitant — Téléphone">
+      <textarea id="medicalNotes" placeholder="Notes importantes"></textarea>
+      <button onclick="saveMedical()">💾 Enregistrer</button>
+    </div>
+    <div id="medicalFiche" class="hidden"></div>
+  </section>
 
-<h1>TempZen Santé</h1>
+  <!-- MÉDICAMENTS -->
+  <section id="medicaments" class="page hidden">
+    <h2>💊 Médicaments</h2>
+    <input id="medNom" placeholder="Nom du médicament">
+    <input id="medDose" placeholder="Dosage (ex: 100 mg matin midi soir)">
+    <button onclick="addMed()">Ajouter</button>
+    <div id="medList"></div>
+  </section>
 
-<p>Assistant santé simple</p>
+  <!-- RDV -->
+  <section id="rdv" class="page hidden">
+    <h2>📅 Rendez-vous</h2>
+    <input id="rdvNom" placeholder="Nom du rendez-vous">
+    <input id="rdvDate" type="date">
+    <input id="rdvHeure" type="time">
+    <button onclick="addRdv()">Ajouter</button>
+    <div id="rdvList"></div>
+  </section>
+
+  <!-- SUIVI -->
+  <section id="suivi" class="page hidden">
+    <h2>❤️ Suivi santé</h2>
+    <input id="suiviTexte" placeholder="Ex : Tension, Poids, Glycémie...">
+    <input id="suiviValeur" placeholder="Valeur (ex : 13/8)">
+    <button onclick="addSuivi()">Ajouter</button>
+    <div id="suiviList"></div>
+  </section>
+
+  <!-- ORDONNANCES -->
+  <section id="ordonnances" class="page hidden">
+    <h2>📄 Ordonnances</h2>
+    <input id="ordonnanceNom" placeholder="Nom de l'ordonnance">
+    <input id="ordonnanceDate" type="date">
+    <input id="ordonnanceImage" type="file" accept="image/*">
+    <button onclick="addOrdonnance()">Ajouter</button>
+    <div id="ordonnanceList"></div>
+  </section>
+
+  <!-- URGENCE -->
+  <section id="urgence" class="page hidden">
+    <h2>🚨 Urgence</h2>
+    <a href="tel:15" class="btn-urgence-15">📞 Appeler le 15 (SAMU)</a>
+    <h3>Personnes à contacter</h3>
+    <input id="contactNom" placeholder="Nom (ex : Marie, fille)">
+    <input id="contactTel" type="tel" placeholder="Numéro de téléphone">
+    <button onclick="addContact()">Ajouter</button>
+    <div id="contactList"></div>
+  </section>
+
+  <script src="./db.js"></script>
+  <script src="./app.js"></script>
+  <script>
+    if("serviceWorker" in navigator){
+      navigator.serviceWorker.register("./sw.js");
+    }
+  </script>
 
 </div>
-
-</header>
-
-
-
-<nav>
-
-
-<button onclick="showPage('accueil')">
-🏠 Accueil
-</button>
-
-
-<button onclick="showPage('medicaments')">
-💊 Médicaments
-</button>
-
-
-<button onclick="showPage('rdv')">
-📅 Rendez-vous
-</button>
-
-
-<button onclick="showPage('suivi')">
-❤️ Suivi santé
-</button>
-
-
-<button onclick="showPage('ordonnances')">
-📄 Ordonnances
-</button>
-
-
-<button onclick="showPage('urgence')">
-🚨 Urgence
-</button>
-
-
-</nav>
-
-
-
-
-
-<section id="accueil" class="page">
-
-
-<h2>Bienvenue</h2>
-
-<p>
-Votre espace santé personnel.
-</p>
-
-
-</section>
-
-
-
-
-
-
-<section id="medicaments" class="page hidden">
-
-
-<h2>💊 Médicaments</h2>
-
-
-<input id="medNom"
-placeholder="Nom du médicament">
-
-
-<input id="medDose"
-placeholder="Dosage (ex: 100 mg matin midi soir)">
-
-
-<button onclick="addMed()">
-Ajouter
-</button>
-
-
-<div id="medList"></div>
-
-
-</section>
-
-
-
-
-
-
-
-<section id="rdv" class="page hidden">
-
-
-<h2>📅 Rendez-vous</h2>
-
-
-<input id="rdvNom"
-placeholder="Nom du rendez-vous">
-
-
-<input id="rdvDate"
-type="date">
-
-
-<input id="rdvHeure"
-type="time">
-
-
-<button onclick="addRdv()">
-Ajouter
-</button>
-
-
-<div id="rdvList"></div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section id="suivi" class="page hidden">
-
-
-<h2>❤️ Suivi santé</h2>
-
-
-<input id="suiviTexte"
-placeholder="Ex : Tension, Poids, Glycémie...">
-
-
-<input id="suiviValeur"
-placeholder="Valeur (ex : 13/8)">
-
-
-<button onclick="addSuivi()">
-Ajouter
-</button>
-
-
-<div id="suiviList"></div>
-
-
-</section>
-
-
-
-
-
-
-
-<section id="ordonnances" class="page hidden">
-
-
-<h2>📄 Ordonnances</h2>
-
-
-<input id="ordonnanceNom"
-placeholder="Nom de l'ordonnance">
-
-
-<input id="ordonnanceDate"
-type="date">
-
-
-<input id="ordonnanceImage"
-type="file"
-accept="image/*">
-
-
-<button onclick="addOrdonnance()">
-Ajouter
-</button>
-
-
-<div id="ordonnanceList"></div>
-
-
-</section>
-
-
-
-
-
-
-
-<section id="urgence" class="page hidden">
-
-
-<h2>🚨 Urgence</h2>
-
-
-<a href="tel:15" class="btn-urgence-15">
-
-📞 Appeler le 15 (SAMU)
-
-</a>
-
-
-<h3>Personnes à contacter</h3>
-
-
-<input id="contactNom"
-placeholder="Nom (ex : Marie, fille)">
-
-
-<input id="contactTel"
-type="tel"
-placeholder="Numéro de téléphone">
-
-
-<button onclick="addContact()">
-Ajouter
-</button>
-
-
-<div id="contactList"></div>
-
-
-</section>
-
-
-
-
-
-
-
-<script src="./db.js"></script>
-
-<script src="./app.js"></script>
-
-
-
-<script>
-
-if ("serviceWorker" in navigator){
-
-navigator.serviceWorker.register("./sw.js");
-
-}
-
-</script>
-
-
-
 </body>
-
 </html>
